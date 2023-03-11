@@ -331,4 +331,4 @@ Language:add(code, "Remaining Bots Get Killed before a new wave starts", "剩余
 Language:add(code, "Bot min time Attack one player", "BOT攻击一名玩家的最短时间")
 Language:add(code, "The minimum time a bot attacks one player for", "BOT攻击一名玩家的最短时间")
 Language:add(code, "Bot attack mode duration", "BOT攻击模式持续时间")
-Language:add(code, "The minimum time a zombie-bot tries to attack a player - recommended minimum 15," "僵尸BOT尝试攻击玩家的最短时间 - 建议最少15,")
+Language:add(code, "The minimum time a zombie-bot tries to attack a player - recommended minimum 15", "僵尸BOT尝试攻击玩家的最短时间 - 建议最少15")

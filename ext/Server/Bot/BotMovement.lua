@@ -165,7 +165,7 @@ function BotMovement:UpdateNormalMovement(p_Bot)
 							s_PointIncrement = MathUtils:GetRandomInt(-5, 5) -- Go 5 points further.
 							-- Experimental.
 							if s_PointIncrement == 0 then -- We can't have this.
-								s_PointIncrement = -2 -- Go backwards and try again.
+								s_PointIncrement = -2   -- Go backwards and try again.
 							end
 
 							if (Globals.IsConquest or Globals.IsRush) then
@@ -320,22 +320,25 @@ function BotMovement:UpdateNormalMovement(p_Bot)
 end
 
 function BotMovement:UpdateShootMovement(p_Bot)
-
 	local s_TargetCycles = 1
 	p_Bot.m_ActiveSpeedValue = BotMoveSpeeds.Sprint -- Run towards player.
 
 	if #p_Bot._ShootWayPoints > s_TargetCycles and Config.JumpWhileShooting then
 		local s_DistanceDone = p_Bot._ShootWayPoints[#p_Bot._ShootWayPoints].Position:Distance(p_Bot._ShootWayPoints[
-			#p_Bot._ShootWayPoints - s_TargetCycles].Position)
+		#p_Bot._ShootWayPoints - s_TargetCycles].Position)
 		if s_DistanceDone < 0.5 and p_Bot._DistanceToPlayer > 1.0 then -- No movement was possible. Try to jump over an obstacle.
 			p_Bot.m_ActiveSpeedValue = BotMoveSpeeds.Normal
 			p_Bot._ObstacleSequenceTimer = 1
 			table.remove(p_Bot._ShootWayPoints)
 			p_Bot:_SetInput(EntryInputActionEnum.EIAJump, 1)
 			p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeJumpClimb, 1)
-			if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
-				local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
-				s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+			if p_Bot.m_Kit == BotKits.Engineer then
+				if true then --MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
+					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
+					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+				end
+			else
+				-- TODO: maybe jump from time to time?
 			end
 		else
 			p_Bot._ObstacleSequenceTimer = 0
@@ -354,7 +357,6 @@ function BotMovement:UpdateShootMovement(p_Bot)
 	end
 
 	p_Bot._AttackModeMoveTimer = p_Bot._AttackModeMoveTimer + Registry.BOT.BOT_UPDATE_CYCLE
-
 end
 
 function BotMovement:UpdateSpeedOfMovement(p_Bot)
@@ -498,7 +500,6 @@ function BotMovement:UpdateYaw(p_Bot)
 
 	p_Bot.m_Player.input.authoritativeAimingYaw = s_TempYaw
 	p_Bot.m_Player.input.authoritativeAimingPitch = p_Bot._TargetPitch
-
 end
 
 function BotMovement:UpdateStaticMovement(p_Bot)
@@ -512,7 +513,7 @@ function BotMovement:UpdateStaticMovement(p_Bot)
 		p_Bot._TargetYaw = p_Bot._TargetPlayer.input.authoritativeAimingYaw
 		p_Bot._TargetPitch = p_Bot._TargetPlayer.input.authoritativeAimingPitch
 
-	-- Mirroring.
+		-- Mirroring.
 	elseif p_Bot.m_ActiveMoveMode == BotMoveModes.Mirror and p_Bot._TargetPlayer ~= nil then
 		---@type EntryInputActionEnum|integer
 		for i = 0, 36 do
@@ -522,8 +523,8 @@ function BotMovement:UpdateStaticMovement(p_Bot)
 		p_Bot._TargetYaw = p_Bot._TargetPlayer.input.authoritativeAimingYaw +
 			(
 			(p_Bot._TargetPlayer.input.authoritativeAimingYaw > math.pi) and
-				-math.pi or
-				math.pi
+			-math.pi or
+			math.pi
 			)
 		p_Bot._TargetPitch = p_Bot._TargetPlayer.input.authoritativeAimingPitch
 	end

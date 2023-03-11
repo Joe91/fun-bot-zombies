@@ -43,7 +43,6 @@ Registry = {
 		-- Prints current version in console.
 		CLIENT_SHOW_VERSION_ON_JOIN = false,
 	},
-
 	-- Some Client Variables.
 	CLIENT = {
 		-- Distance a bot tries to revive a player.
@@ -53,7 +52,6 @@ Registry = {
 		-- Time bots will not attack a player when spawned.
 		SPAWN_PROTECTION = 1.5,
 	},
-
 	-- Variables related to raycasting.
 	GAME_RAYCASTING = {
 		MAX_RAYCASTS_PER_PLAYER_PER_CYCLE = 3,
@@ -68,7 +66,6 @@ Registry = {
 		-- Max checks per cycle.
 		BOT_BOT_MAX_CHECKS = 30
 	},
-
 	GAME_DIRECTOR = {
 		UPDATE_OBJECTIVES_CYCLE = 1.5,
 		-- Time after a MCO is considered destroyed.
@@ -80,7 +77,6 @@ Registry = {
 		-- Increments of nodes to search best patch with.
 		NODE_SEARCH_INCREMENTS = 10,
 	},
-
 	VEHICLES = {
 		-- Distance for the "enter vehicle" command.
 		MIN_DISTANCE_VEHICLE_ENTER = 10.0,
@@ -113,9 +109,9 @@ Registry = {
 		-- Seat-check cycle-time.
 		VEHICLE_SEAT_CHECK_CYCLE_TIME = 4.0,
 	},
-
 	ZOMBIES = {
 		PROBABILITY_DROP_AMMO = 20,
+		PROBABILITY_DROP_NADE = 70,
 		PROBABILITY_GO_FOR_DIRECT_ATTACK = 50,
 		WEIGHT_PRONE = 2,
 		WEIGHT_CROUCH = 2,
@@ -124,7 +120,6 @@ Registry = {
 		MIN_MOVE_SPEED = 0.2,
 		MAX_MOVE_SPEED = 1.0,
 	},
-
 	-- Bot related.
 	BOT = {
 		-- Update cycle fast.
@@ -152,7 +147,6 @@ Registry = {
 		-- Advanced aiming makes a difference on huge distances, but costs more performance.
 		USE_ADVANCED_AIMING = false,
 	},
-
 	-- Bot team balancing (only in keep_playercount - spawn-mode)
 	BOT_TEAM_BALANCING = {
 		-- Minimum amount of players required before balancing bots across teams.
@@ -162,7 +156,6 @@ Registry = {
 		-- Note: Only for mode keep_playercount.
 		ALLOWED_DIFFERENCE = 1,
 	},
-
 	-- Bot spawning.
 	BOT_SPAWN = {
 		-- Time between a level loading and the first bot spawning.

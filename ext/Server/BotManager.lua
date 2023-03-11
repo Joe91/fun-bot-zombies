@@ -84,11 +84,26 @@ end
 
 ---VEXT Server Player:Left Event
 function BotManager:OnPlayerKilled(p_Player)
-	if not m_Utilities:isBot(p_Player) or not Config.ZombiesDropAmmo or MathUtils:GetRandomInt(1, 100) > Registry.ZOMBIES.PROBABILITY_DROP_AMMO then
+	if not m_Utilities:isBot(p_Player) or not Config.ZombiesDropAmmo then
 		return
 	end
 
-	local bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile') --ResourceManager:SearchForInstanceByGuid(Guid('31F0464E-5313-4880-40CF-D140349C71A5')) --
+	local s_RandomValue = MathUtils:GetRandomInt(1, 100)
+
+	local s_Bot = self:GetBotByName(p_Player.name)
+	local bp = nil
+	if s_Bot and s_Bot.m_Kit == BotKits.Support then
+		if s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_NADE then
+			return
+		end
+		bp = ResourceManager:SearchForDataContainer('Weapons/M67/M67_Projectile')
+	else
+		if s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_AMMO then
+			return
+		end
+		bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
+	end
+
 	if bp == nil then
 		return
 	end
@@ -97,11 +112,6 @@ function BotManager:OnPlayerKilled(p_Player)
 	creationParams.transform = LinearTransform()
 	creationParams.networked = true
 	creationParams.transform.trans = p_Player.soldier.transform.trans:Clone()
-	-- local projectileBluePrint = ProjectileBlueprint(bp)
-	-- local supplyData = SupplySphereEntityData(projectileBluePrint.object).supplyData
-	-- supplyData.ammo.infiniteCapacity = false
-	-- supplyData.ammo.supplyPointsCapacity = 1
-	-- supplyData.ammo.supplyPointsRefillSpeed = 1
 
 	local createdBus = EntityManager:CreateEntitiesFromBlueprint(bp, creationParams)
 	if createdBus == nil then
@@ -160,7 +170,7 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 		return
 	end
 
-	if (p_Info.boneIndex == 1) then -- headshot
+	if (p_Info.boneIndex == 1) then                                  -- headshot
 		p_Info.damage = p_Info.damage * Config.BotHeadshotDamageMultiplier -- headshot multiplier is 2x by default
 	end
 
@@ -177,7 +187,7 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 				p_Info.damage = 0.0
 			end
 		end
-	-- This is a real player; check if the damage was dealt by a bot.
+		-- This is a real player; check if the damage was dealt by a bot.
 	else
 		-- We have a giver.
 		if p_GiverInfo and p_GiverInfo.giver then
@@ -385,7 +395,6 @@ end
 ---Returns the teamId for the team that has the most real players
 ---@return TeamId
 function BotManager:GetPlayerTeam()
-
 	--- Count real players for each team
 	---@type table<TeamId, integer>
 	local s_CountPlayers = {}
@@ -741,14 +750,17 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		maxHealthValue = Globals.MaxHealthValue
 		minHealthValue = Globals.MinHealthValue
 	end
+	s_BotSoldier.maxHealth = minHealthValue
 
 	-- Customization of health of bot.
 	local s_RandomValueOfBot = MathUtils:GetRandom(0.0, 1.0)
 	p_Bot._RandomValueOfBot = s_RandomValueOfBot
-	if Config.RandomHealthOfZombies then
-
-		s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
-	else
+	if p_Bot.m_Kit == BotKits.Assault then
+		-- if Config.RandomHealthOfZombies then
+		-- 	s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
+		-- else
+		-- 	s_BotSoldier.maxHealth = maxHealthValue
+		-- end
 		s_BotSoldier.maxHealth = maxHealthValue
 	end
 
@@ -799,34 +811,41 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		p_Bot._ZombieSpeedValue = BotMoveSpeeds.Normal
 	end
 
-	local s_MaxJumpValue = Config.MaxHighJumpSpeed
-	local s_MinJumpValue = Config.MinHighJumpSpeed
-	if Globals.SpawnMode == SpawnModes.wave_spawn then
-		s_MaxJumpValue = Globals.MaxJumpSpeedValue
-		s_MinJumpValue = Globals.MinJumpSpeedValue
-	end
+	-- Engineers can jump high
+	if p_Bot.m_Kit == BotKits.Engineer then
+		local s_MaxJumpValue = Config.MaxHighJumpSpeed
+		local s_MinJumpValue = Config.MinHighJumpSpeed
+		if Globals.SpawnMode == SpawnModes.wave_spawn then
+			s_MaxJumpValue = Globals.MaxJumpSpeedValue
+			s_MinJumpValue = Globals.MinJumpSpeedValue
+		end
 
-	if Config.RandomJumpSpeedOfZombies then
-		p_Bot._HighJumpSpeed = s_MinJumpValue + (s_RandomValueOfBot * (s_MaxJumpValue - s_MinJumpValue))
-	else
 		p_Bot._HighJumpSpeed = s_MaxJumpValue
+		-- if Config.RandomJumpSpeedOfZombies then
+		-- 	p_Bot._HighJumpSpeed = s_MinJumpValue + (s_RandomValueOfBot * (s_MaxJumpValue - s_MinJumpValue))
+		-- else
+		-- 	p_Bot._HighJumpSpeed = s_MaxJumpValue
+		-- end
 	end
 
 	local s_SpeedValue = 0.0
-	local s_MaxSpeedValue = Config.SpeedFactorAttack
-	local s_MinSpeedValue = Config.MinSpeedFactorAttack
-	if Globals.SpawnMode == SpawnModes.wave_spawn then
-		s_MaxSpeedValue = Globals.MaxSpeedAttackValue
-		s_MinSpeedValue = Globals.MinSpeedAttackValue
-	end
-	if Config.RandomAttackSpeedOfZombies then
-		s_SpeedValue = s_MinSpeedValue + (s_RandomValueOfBot * (s_MaxSpeedValue - s_MinSpeedValue))
-	else
+	-- Recons can sprint faster
+	if p_Bot.m_Kit == BotKits.Recon then
+		local s_MaxSpeedValue = Config.SpeedFactorAttack
+		local s_MinSpeedValue = Config.MinSpeedFactorAttack
+		if Globals.SpawnMode == SpawnModes.wave_spawn then
+			s_MaxSpeedValue = Globals.MaxSpeedAttackValue
+			s_MinSpeedValue = Globals.MinSpeedAttackValue
+		end
+		-- if Config.RandomAttackSpeedOfZombies then
+		-- 	s_SpeedValue = s_MinSpeedValue + (s_RandomValueOfBot * (s_MaxSpeedValue - s_MinSpeedValue))
+		-- else
+		-- 	s_SpeedValue = s_MaxSpeedValue
+		-- end
 		s_SpeedValue = s_MaxSpeedValue
+
+		p_Bot._SpeedFactorAttack = s_SpeedValue
 	end
-
-	p_Bot._SpeedFactorAttack = s_SpeedValue
-
 	if s_SpeedValue < 1.0 then
 		s_SpeedValue = 1.0 -- default sprint behaviour, don't sptint later
 	end
@@ -1102,7 +1121,6 @@ end
 
 ---@param p_Player Player
 function BotManager:EnterVehicle(p_Player)
-
 	local s_VehicleType = m_Vehicles:FindOutVehicleType(p_Player)
 	if s_VehicleType == VehicleTypes.NoVehicle or s_VehicleType == VehicleTypes.MobileArtillery then
 		return
