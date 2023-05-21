@@ -2,6 +2,7 @@
 ---@overload fun():GamemodeManager
 GamemodeManager = class('GamemodeManager')
 
+local m_BotManager = require('BotManager')
 local firstPlayerJoined = false
 
 function GamemodeManager:OnExtensionLoaded()
@@ -26,8 +27,24 @@ end
 function GamemodeManager:OnPlayedKilled(p_Player)
     --Should be a better way of doing this but I'm lazy :)
     --Prevents the human team from getting too many tickets
-    if(p_Player.teamId == 2) then
+    if(p_Player.teamId == Config.BotTeam) then
         TicketManager:SetTicketCount(1, 0)
+        if ((g_BotSpawner._BotsToSpawnInWave - Globals.MaxPlayers) - 1) - g_BotSpawner._SpawnedBotsInCurrentWave > 0 then
+            g_BotSpawner._SpawnedBotsInCurrentWave = g_BotSpawner._SpawnedBotsInCurrentWave + 1
+            if Globals.RespawnWayBots == false then
+                Globals.RespawnWayBots = true
+                for index, bot in ipairs(m_BotManager._Bots) do
+                    bot._Respawning = Globals.RespawnWayBots
+                end
+                print("Enabled respawning!")
+            end
+        elseif Globals.RespawnWayBots == true and ((g_BotSpawner._BotsToSpawnInWave - Globals.MaxPlayers) - 1) - g_BotSpawner._SpawnedBotsInCurrentWave < 1 then
+            Globals.RespawnWayBots = false
+            for index, bot in ipairs(m_BotManager._Bots) do
+                bot._Respawning = Globals.RespawnWayBots
+            end
+            print("Disabled respawning!")
+        end
     end
 end
 

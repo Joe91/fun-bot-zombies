@@ -13,8 +13,9 @@ end
 
 ---@param p_Bot Bot
 local function _DefaultAttackingAction(p_Bot)
-	if not p_Bot._ShootPlayer.soldier or not p_Bot._Shoot or p_Bot._ShootModeTimer >= Config.BotAttackDuration then
+	if not p_Bot._ShootPlayer.soldier or not p_Bot._Shoot or p_Bot._ShootModeTimer >= Config.BotAttackDuration or (p_Bot:IsStuck() and p_Bot._AttackTimer > 15) then
 		p_Bot._TargetPitch = 0.0
+		p_Bot._AttackTimer = 0
 		p_Bot:AbortAttack()
 		return
 	end
@@ -72,12 +73,13 @@ end
 function BotAttacking:UpdateAttacking(p_Bot)
 	-- Reset if enemy is dead or attack is disabled.
 	if not p_Bot._ShootPlayer then
+		p_Bot._AttackTimer = 0
 		p_Bot:AbortAttack()
 		return
 	end
 
 	_DefaultAttackingAction(p_Bot)
-
+	p_Bot._AttackTimer = p_Bot._AttackTimer + Registry.BOT.BOT_UPDATE_CYCLE
 end
 
 if g_BotAttacking == nil then

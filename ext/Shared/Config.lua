@@ -21,6 +21,7 @@ Config = {
 	BotMaxHealth = 125.0,				-- Max health of bot at spawn(default 100.0) 
 	BotMinHealth = 75.0,				-- Min health of bot at spawn (default 100.0) 
 	BotHeadshotDamageMultiplier = 2.0,	-- Damage multiplier for shooting bots in the head 
+	BotExplosionDamageMultiplier = 2.25, -- Damage multiplier for explosions
 	BotWorseningSkill = 0.50,			-- Variation of the skill of a single bot. The higher, the worse the bots can get compared to the original settings 
 	DamageFactorKnife = 1.5,			-- Original Damage from bots gets multiplied by this 
 	SpeedFactorAttack = 1.2,			-- Modifies the speed while attacking. 1 = normal 
@@ -45,8 +46,8 @@ Config = {
 	-- WAVES 
 	Waves = 20,							-- Total amount of waves needed to win. 0 = infinite 
 	PlayerLives = 20,					-- Amount of times players can die before losing 
-	FirstWaveCount = 30,				-- Zombies that spawn in the first wave 
-	IncrementZombiesPerWave = 10,		-- Zombies that are added in each new wave 
+	FirstWaveCount = 48,				-- Zombies that spawn in the first wave 
+	IncrementZombiesPerWave = 24,		-- Zombies that are added in each new wave 
 	IncrementMaxHealthPerWave = 25,		-- Zombies get more health each wave 
 	IncrementDamageFactorPerWave = 0.1,	-- Zombies deal more damage each wave 
 	IncrementMaxSpeedPerWave = 0.05,	-- Zombies get more speed each wave 
@@ -60,6 +61,7 @@ Config = {
 	FovForShooting = 270,				-- Degrees of FOV of Bot 
 	FovVerticleForShooting = 270,		-- Degrees of FOV of Bot in vertical direction 
 	MaxShootDistance = 125,				-- Meters before bots (not sniper) will start shooting at players 
+	MaxShootHeight = 12,				-- Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance
 	MaxDistanceShootBack = 150,			-- Meters until bots (not sniper) shoot back if hit 
 	BotAttackMode = BotAttackModes.RandomNotSet,	-- Mode the Bots attack with. Random, Crouch or Stand 
 	ShootBackIfHit = true,				-- Bot shoots back if hit 

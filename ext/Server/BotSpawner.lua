@@ -36,6 +36,7 @@ function BotSpawner:RegisterVars()
 	self._CurrentSpawnWave = 0
 	self._SpawnedBotsInCurrentWave = 0
 	self._BotsToSpawnInWave = 0
+	self._BotsLeftInCurrentWave = 0
 end
 
 -- =============================================
@@ -58,6 +59,7 @@ function BotSpawner:OnLevelLoaded(p_Round)
 	self._CurrentSpawnWave = 0
 	self._SpawnedBotsInCurrentWave = 0
 	self._BotsToSpawnInWave = 0
+	self._BotsLeftInCurrentWave = 0
 
 	self._LastRound = p_Round
 
@@ -96,6 +98,8 @@ function BotSpawner:OnUpdateManagerUpdate(p_DeltaTime, p_UpdatePass)
 	if self._FirstSpawnDelay > 0 then
 		self._FirstSpawnDelay = self._FirstSpawnDelay - p_DeltaTime
 		return
+	elseif self._SpawnedBotsInCurrentWave == 0 then
+		self._BotsLeftInCurrentWave = self._BotsToSpawnInWave
 	end
 
 	if self._FirstSpawnInLevel then
@@ -395,7 +399,7 @@ function BotSpawner:UpdateBotAmountAndTeam()
 				if Config.Waves == 0 then
 					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. " finished, new wave starts in a few seconds", Config.TimeBetweenWaves)
 				else
-					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. "/" .. Config.Waves .. " finished, new wave starts in a few seconds", Config.TimeBetweenWaves)
+					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. "/" .. Config.Waves .. " finished, new wave starts in a " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
 				end
 
 				self._FirstSpawnDelay = Config.TimeBetweenWaves

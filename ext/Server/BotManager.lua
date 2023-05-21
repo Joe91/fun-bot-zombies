@@ -170,9 +170,16 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 		return
 	end
 
-	if (p_Info.boneIndex == 1) then                                  -- headshot
-		p_Info.damage = p_Info.damage * Config.BotHeadshotDamageMultiplier -- headshot multiplier is 2x by default
+	if(p_Soldier.player.teamId == Config.BotTeam) then
+		if (p_Info.isBulletDamage and p_Info.boneIndex == 1) then                                  -- headshot
+			p_Info.damage = p_Info.damage * Config.BotHeadshotDamageMultiplier -- headshot multiplier is 2x by default
+		end
+	
+		if (p_Info.isExplosionDamage or p_Info.isDemolitionDamage) then
+			p_Info.damage = p_Info.damage * Config.BotExplosionDamageMultiplier
+		end
 	end
+	
 
 	-- This is a bot.
 	if m_Utilities:isBot(p_Soldier.player) then
@@ -727,13 +734,13 @@ end
 function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 	local s_BotPlayer = p_Bot.m_Player
 
-	if s_BotPlayer.soldier ~= nil then
-		s_BotPlayer.soldier:Destroy()
-	end
+	-- if s_BotPlayer.soldier ~= nil then
+	-- 	s_BotPlayer.soldier:Destroy()
+	-- end
 
-	if s_BotPlayer.corpse ~= nil then
-		s_BotPlayer.corpse:Destroy()
-	end
+	-- if s_BotPlayer.corpse ~= nil then
+	-- 	s_BotPlayer.corpse:Destroy()
+	-- end
 
 	-- Returns SoldierEntity.
 	local s_BotSoldier = s_BotPlayer:CreateSoldier(s_BotPlayer.selectedKit, p_Transform)

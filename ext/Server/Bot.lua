@@ -541,6 +541,7 @@ function Bot:ResetSpawnVars()
 	self._ShootTraceTimer = 0.0
 	self._ReloadTimer = 0.0
 	self._BrakeTimer = 0.0
+	self._AttackTimer = 0.0
 	self._AttackModeMoveTimer = 0.0
 	self._AttackMode = BotAttackModes.RandomNotSet
 	self._ShootWayPoints = {}
@@ -598,13 +599,13 @@ function Bot:Destroy()
 	self:ResetVars()
 	self.m_Player.input = nil
 
-	if self.m_Player.soldier ~= nil then
-		self.m_Player.soldier:Destroy()
-	end
+	-- if self.m_Player.soldier ~= nil then
+	-- 	self.m_Player.soldier:Destroy()
+	-- end
 
-	if self.m_Player.corpse ~= nil then
-		self.m_Player.corpse:Destroy()
-	end
+	-- if self.m_Player.corpse ~= nil then
+	-- 	self.m_Player.corpse:Destroy()
+	-- end
 
 	PlayerManager:DeletePlayer(self.m_Player)
 	self.m_Player = nil
