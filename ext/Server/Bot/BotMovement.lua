@@ -336,11 +336,14 @@ function BotMovement:UpdateShootMovement(p_Bot)
 			if p_Bot._ZombieSpeedValue ~= BotMoveSpeeds.VerySlowProne then
 				p_Bot:_SetInput(EntryInputActionEnum.EIAJump, 1)
 				p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeJumpClimb, 1)
-			end
 
-			if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
-				local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
-				s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+
+				if p_Bot.m_Kit == BotKits.Engineer then
+				-- TODO: always jump or only from time to time? if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
+					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
+					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+
+				end
 			end
 		else
 			p_Bot._ObstacleSequenceTimer = 0

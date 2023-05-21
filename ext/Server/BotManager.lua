@@ -24,7 +24,7 @@ function BotManager:__init()
 	---@type table<integer, EntryInput>
 	---`[Player.id] -> EntryInput`
 	self._BotInputs = {}
-	---@type string[]MathUtils:Clamp(
+	---@type string[]
 	---`playerName:string[]`
 	self._ActivePlayers = {}
 	self._BotAttackBotTimer = 0.0
@@ -35,6 +35,7 @@ function BotManager:__init()
 
 	---@type string[]
 	---`BotName[]`
+	self._BotBotAttackList = {}
 	self._RaycastsPerActivePlayer = 0
 	---@type table<string, boolean>
 	---`[BotName] -> boolean`
@@ -175,6 +176,47 @@ function BotManager:OnPlayerKilled(p_Player)
 		for _, entity in pairs(createdBus.entities) do
 			entity:Init(Realm.Realm_ClientAndServer, true)
 		end
+	end
+end
+
+---VEXT Server Player:Killed Event
+function BotManager:OnPlayerKilled(p_Player)
+	if not m_Utilities:isBot(p_Player) or not Config.ZombiesDropAmmo then
+		return
+	end
+
+	local s_RandomValue = MathUtils:GetRandomInt(1, 100)
+
+	local s_Bot = self:GetBotByName(p_Player.name)
+	local bp = nil
+	if s_Bot and s_Bot.m_Kit == BotKits.Support then
+		if s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_NADE then
+			return
+		end
+		bp = ResourceManager:SearchForDataContainer('Weapons/M67/M67_Projectile')
+	else
+		if s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_AMMO then
+			return
+		end
+		bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
+	end
+
+	if bp == nil then
+		return
+	end
+
+	local creationParams = EntityCreationParams()
+	creationParams.transform = LinearTransform()
+	creationParams.networked = true
+	creationParams.transform.trans = p_Player.soldier.transform.trans:Clone()
+
+	local createdBus = EntityManager:CreateEntitiesFromBlueprint(bp, creationParams)
+	if createdBus == nil then
+		return
+	end
+
+	for _, entity in pairs(createdBus.entities) do
+		entity:Init(Realm.Realm_ClientAndServer, true)
 	end
 end
 
@@ -828,13 +870,20 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		maxHealthValue = Globals.MaxHealthValue
 		minHealthValue = Globals.MinHealthValue
 	end
+	s_BotSoldier.maxHealth = minHealthValue
 
 	-- Customization of health of bot.
 	local s_RandomValueOfBot = MathUtils:GetRandom(0.0, 1.0)
 	p_Bot._RandomValueOfBot = s_RandomValueOfBot
-	if Config.RandomHealthOfZombies then
-		s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
-	else
+
+	-- TODO: randomize some health again?
+	-- if Config.RandomHealthOfZombies then
+	-- 	s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
+	-- else
+	-- 	s_BotSoldier.maxHealth = maxHealthValue
+	-- end	
+
+	if p_Bot.m_Kit == BotKits.Assault then
 		s_BotSoldier.maxHealth = maxHealthValue
 	end
 
@@ -894,37 +943,39 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		s_MinJumpValue = Globals.MinJumpSpeedValue
 	end
 
-	if Config.RandomJumpSpeedOfZombies then
-		p_Bot._HighJumpSpeed = s_MinJumpValue + (s_RandomValueOfBot * (s_MaxJumpValue - s_MinJumpValue))
-	else
+	-- Engineers can jump high
+	if p_Bot.m_Kit == BotKits.Engineer then
 		p_Bot._HighJumpSpeed = s_MaxJumpValue
+	else
+		p_Bot._HighJumpSpeed = s_MinJumpValue
 	end
+	-- TODO: some randomized values for the other bots?
 
-	local SpeedValue = 0.0
+	local s_SpeedValue = 0.0
 	local s_MaxSpeedValue = Config.SpeedFactorAttack
 	local s_MinSpeedValue = Config.MinSpeedFactorAttack
 	if Globals.SpawnMode == SpawnModes.wave_spawn then
 		s_MaxSpeedValue = Globals.MaxSpeedAttackValue
 		s_MinSpeedValue = Globals.MinSpeedAttackValue
 	end
-	if Config.RandomAttackSpeedOfZombies then
-		SpeedValue = s_MinSpeedValue + (s_RandomValueOfBot * (s_MaxSpeedValue - s_MinSpeedValue))
+
+	-- Recons can sprint faster
+	if p_Bot.m_Kit == BotKits.Recon then
+		s_SpeedValue = s_MaxSpeedValue
+		p_Bot._SpeedFactorAttack = s_SpeedValue
 	else
-		SpeedValue = s_MaxSpeedValue
+		p_Bot._SpeedFactorAttack = s_MinSpeedValue
 	end
-
-	p_Bot._SpeedFactorAttack = SpeedValue
-	p_Bot._SpeedValue = SpeedValue
-
-	if SpeedValue < 1.0 then
-		SpeedValue = 1.0 -- default sprint behaviour, don't sptint later
+	if s_SpeedValue < 1.0 then
+		s_SpeedValue = 1.0 -- default sprint behaviour, don't sptint later
 	end
+	-- TODO: some randomized values for the other bots?
 
 	local s_EntityIterator = EntityManager:GetIterator('PropertyCastEntity')
 	local s_Entity = s_EntityIterator:Next()
 	while s_Entity do
 		if s_Entity.data and s_Entity.data.instanceGuid == Guid("51A231A1-CCBA-3DEF-1E3B-A28F5AE67188") and s_Entity.bus == s_BotPlayer.soldier.bus then
-			s_Entity:PropertyChanged("FloatValue", SpeedValue)
+			s_Entity:PropertyChanged("FloatValue", s_SpeedValue)
 			return
 		end
 		s_Entity = s_EntityIterator:Next()

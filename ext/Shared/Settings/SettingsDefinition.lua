@@ -187,6 +187,18 @@ SettingsDefinition = {
 			Category = "DIFFICULTY"
 		},
 		{
+			Name = "BotExplosionDamageMultiplier",
+			Text = "Bot Explosion DamageMultiplier",
+			---@type Type|integer
+			Type = Type.Float,
+			Value = Config.BotExplosionDamageMultiplier,
+			Description = "Damage multiplier for explosions ",
+			Reference = Range(0.0, 100.00, 0.1),
+			Default = 2.25,
+			UpdateFlag = UpdateFlag.None,
+			Category = "DIFFICULTY"
+		},
+		{
 			Name = "BotWorseningSkill",
 			Text = "Bot Worsening Skill",
 			---@type Type|integer
@@ -230,7 +242,7 @@ SettingsDefinition = {
 			Value = Config.MinSpeedFactorAttack,
 			Description = "Modifies the minimal speed while attacking. 1 = normal",
 			Reference = Range(0.00, 3.00, 0.10),
-			Default = 0.5,
+			Default = 0.7,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -436,7 +448,7 @@ SettingsDefinition = {
 			Value = Config.FirstWaveCount,
 			Description = "Zombies that spawn in the first wave",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 30,
+			Default = 48,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -448,7 +460,7 @@ SettingsDefinition = {
 			Value = Config.IncrementZombiesPerWave,
 			Description = "Zombies that are added in each new wave",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 10,
+			Default = 24,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -575,13 +587,25 @@ SettingsDefinition = {
 		},
 		{
 			Name = "MaxShootDistance",
-			Text = "Max Shoot-Distance No Sniper",
+			Text = "Max Shoot-Distance",
 			---@type Type|integer
 			Type = Type.Integer,
 			Value = Config.MaxShootDistance,
-			Description = "Meters before bots (not sniper) will start shooting at players",
+			Description = "Meters before bots will start shooting at players",
 			Reference = Range(1.00, 1500.00, 5.0),
 			Default = 125,
+			UpdateFlag = UpdateFlag.None,
+			Category = "BEHAVIOUR"
+		},
+		{
+			Name = "MaxShootHeight",
+			Text = "Max Shoot-Height",
+			---@type Type|integer
+			Type = Type.Integer,
+			Value = Config.MaxShootHeight,
+			Description = "Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance",
+			Reference = Range(1.00, 1500.00, 5.0),
+			Default = 12,
 			UpdateFlag = UpdateFlag.None,
 			Category = "BEHAVIOUR"
 		},
