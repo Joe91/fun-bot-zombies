@@ -181,24 +181,37 @@ end
 
 ---VEXT Server Player:Killed Event
 function BotManager:OnPlayerKilled(p_Player)
-	if not m_Utilities:isBot(p_Player) or not Config.ZombiesDropAmmo then
+	if not m_Utilities:isBot(p_Player) then
 		return
 	end
 
-	local s_RandomValue = MathUtils:GetRandomInt(1, 100)
 
 	local s_Bot = self:GetBotByName(p_Player.name)
 	local bp = nil
-	if s_Bot and s_Bot.m_Kit == BotKits.Support then
-		if s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_NADE then
-			return
+
+	if Config.UseZombieClasses then
+		local s_RandomValue = MathUtils:GetRandomInt(1, 100)
+		-- supports drop nades, other bots drop ammo
+		if s_Bot and s_Bot.m_Kit == BotKits.Support then
+			if not Config.ZombiesDropNades or s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_NADE then
+				return
+			end
+			bp = ResourceManager:SearchForDataContainer('Weapons/M67/M67_Projectile')
+		else
+			if not Config.ZombiesDropAmmo or s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_AMMO then
+				return
+			end
+			bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
 		end
-		bp = ResourceManager:SearchForDataContainer('Weapons/M67/M67_Projectile')
 	else
-		if s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_AMMO then
+		-- every bot can drop a nade or ammo
+		if Config.ZombiesDropAmmo and (MathUtils:GetRandomInt(1, 100) < Registry.ZOMBIES.PROBABILITY_DROP_AMMO) then
+			bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
+		elseif Config.ZombiesDropNades and (MathUtils:GetRandomInt(1, 100) < Registry.ZOMBIES.PROBABILITY_DROP_NADE) then
+			bp = ResourceManager:SearchForDataContainer('Weapons/M67/M67_Projectile')
+		else
 			return
 		end
-		bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
 	end
 
 	if bp == nil then
@@ -870,21 +883,25 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		maxHealthValue = Globals.MaxHealthValue
 		minHealthValue = Globals.MinHealthValue
 	end
-	s_BotSoldier.maxHealth = minHealthValue
 
 	-- Customization of health of bot.
 	local s_RandomValueOfBot = MathUtils:GetRandom(0.0, 1.0)
 	p_Bot._RandomValueOfBot = s_RandomValueOfBot
 
-	-- TODO: randomize some health again?
-	-- if Config.RandomHealthOfZombies then
-	-- 	s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
-	-- else
-	-- 	s_BotSoldier.maxHealth = maxHealthValue
-	-- end	
-
-	if p_Bot.m_Kit == BotKits.Assault then
-		s_BotSoldier.maxHealth = maxHealthValue
+	if Config.UseZombieClasses then
+		-- only assault-bots use the max health
+		if p_Bot.m_Kit == BotKits.Assault then
+			s_BotSoldier.maxHealth = maxHealthValue
+		else
+			s_BotSoldier.maxHealth = minHealthValue
+		end
+	else
+		-- randmod values of all bots or the same for all
+		if Config.RandomHealthOfZombies then
+			s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
+		else
+			s_BotSoldier.maxHealth = maxHealthValue
+		end
 	end
 
 	s_BotSoldier.health = s_BotSoldier.maxHealth -- this does not work. TODO: find out how to fill the health up
@@ -943,13 +960,21 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		s_MinJumpValue = Globals.MinJumpSpeedValue
 	end
 
-	-- Engineers can jump high
-	if p_Bot.m_Kit == BotKits.Engineer then
-		p_Bot._HighJumpSpeed = s_MaxJumpValue
+	if Config.UseZombieClasses then
+		-- Engineers can jump high
+		if p_Bot.m_Kit == BotKits.Engineer then
+			p_Bot._HighJumpSpeed = s_MaxJumpValue
+		else
+			p_Bot._HighJumpSpeed = s_MinJumpValue
+		end
 	else
-		p_Bot._HighJumpSpeed = s_MinJumpValue
+		-- every bot same values or random-values
+		if Config.RandomJumpSpeedOfZombies then
+			p_Bot._HighJumpSpeed = s_MinJumpValue + (s_RandomValueOfBot * (s_MaxJumpValue - s_MinJumpValue))
+		else
+			p_Bot._HighJumpSpeed = s_MaxJumpValue
+		end
 	end
-	-- TODO: some randomized values for the other bots?
 
 	local s_SpeedValue = 0.0
 	local s_MaxSpeedValue = Config.SpeedFactorAttack
@@ -959,17 +984,26 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		s_MinSpeedValue = Globals.MinSpeedAttackValue
 	end
 
-	-- Recons can sprint faster
-	if p_Bot.m_Kit == BotKits.Recon then
-		s_SpeedValue = s_MaxSpeedValue
-		p_Bot._SpeedFactorAttack = s_SpeedValue
+	if Config.UseZombieClasses then
+		-- Recons can sprint faster
+		if p_Bot.m_Kit == BotKits.Recon then
+			s_SpeedValue = s_MaxSpeedValue
+			p_Bot._SpeedFactorAttack = s_SpeedValue
+		else
+			p_Bot._SpeedFactorAttack = s_MinSpeedValue
+		end
 	else
-		p_Bot._SpeedFactorAttack = s_MinSpeedValue
+		if Config.RandomAttackSpeedOfZombies then
+			s_SpeedValue = s_MinSpeedValue + (s_RandomValueOfBot * (s_MaxSpeedValue - s_MinSpeedValue))
+		else
+			s_SpeedValue = s_MaxSpeedValue
+		end
+		p_Bot._SpeedFactorAttack = s_SpeedValue
 	end
+
 	if s_SpeedValue < 1.0 then
 		s_SpeedValue = 1.0 -- default sprint behaviour, don't sptint later
 	end
-	-- TODO: some randomized values for the other bots?
 
 	local s_EntityIterator = EntityManager:GetIterator('PropertyCastEntity')
 	local s_Entity = s_EntityIterator:Next()
