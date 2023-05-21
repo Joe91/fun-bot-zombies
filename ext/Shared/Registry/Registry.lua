@@ -35,7 +35,7 @@ Registry = {
 		-- Patch version.
 		VERSION_PATCH = 0,
 		-- Additional label for pre-releases and build metadata.
-		VERSION_LABEL = "dev2",
+		VERSION_LABEL = "dev3",
 		-- Current version type of this build.
 		VERSION_TYPE = VersionType.DevBuild,
 		-- The Version used for the Update-Check.
@@ -110,8 +110,8 @@ Registry = {
 		VEHICLE_SEAT_CHECK_CYCLE_TIME = 4.0,
 	},
 	ZOMBIES = {
-		PROBABILITY_DROP_AMMO = 20,
-		PROBABILITY_DROP_NADE = 70,
+		PROBABILITY_DROP_AMMO = 25,
+		PROBABILITY_DROP_NADE = 35,
 		PROBABILITY_GO_FOR_DIRECT_ATTACK = 50,
 		WEIGHT_PRONE = 2,
 		WEIGHT_CROUCH = 2,
