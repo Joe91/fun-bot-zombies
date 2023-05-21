@@ -21,7 +21,7 @@ Config = {
 	BotMaxHealth = 125.0,				-- Max health of bot at spawn(default 100.0) 
 	BotMinHealth = 75.0,				-- Min health of bot at spawn (default 100.0) 
 	BotHeadshotDamageMultiplier = 2.0,	-- Damage multiplier for shooting bots in the head 
-	BotExplosionDamageMultiplier = 2.25, -- Damage multiplier for explosions
+	BotExplosionDamageMultiplier = 2.25, -- Damage multiplier for explosions 
 	BotWorseningSkill = 0.50,			-- Variation of the skill of a single bot. The higher, the worse the bots can get compared to the original settings 
 	DamageFactorKnife = 1.5,			-- Original Damage from bots gets multiplied by this 
 	SpeedFactorAttack = 1.2,			-- Modifies the speed while attacking. 1 = normal 
