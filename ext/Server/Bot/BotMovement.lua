@@ -332,12 +332,18 @@ function BotMovement:UpdateShootMovement(p_Bot)
 			table.remove(p_Bot._ShootWayPoints)
 			p_Bot:_SetInput(EntryInputActionEnum.EIAJump, 1)
 			p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeJumpClimb, 1)
-			if p_Bot.m_Kit == BotKits.Engineer then
-				-- TODO: always jump or only from time to time? if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
-				local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
-				s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+			if Config.UseZombieClasses then
+				-- only engineers jump high (but always)
+				if p_Bot.m_Kit == BotKits.Engineer then
+					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
+					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+				end
 			else
-				-- TODO: maybe jump from time to time if no engineer?
+				-- every bot randomly jumps high
+				if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
+					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
+					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+				end
 			end
 		else
 			p_Bot._ObstacleSequenceTimer = 0

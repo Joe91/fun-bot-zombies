@@ -61,6 +61,28 @@ SettingsDefinition = {
 			Category = "GENERAL"
 		},
 		{
+			Name = "ZombiesDropNades",
+			Text = "Zombies Drop Nades",
+			---@type Type|integer
+			Type = Type.Boolean,
+			Value = Config.ZombiesDropNades,
+			Description = "Zombies drop randomly nades",
+			Default = true,
+			UpdateFlag = UpdateFlag.None,
+			Category = "GENERAL"
+		},
+		{
+			Name = "UseZombieClasses",
+			Text = "Use Zombie Classes",
+			---@type Type|integer
+			Type = Type.Boolean,
+			Value = Config.UseZombieClasses,
+			Description = "Zombie classes behave different",
+			Default = false,
+			UpdateFlag = UpdateFlag.None,
+			Category = "GENERAL"
+		},
+		{
 			Name = "RandomHealthOfZombies",
 			Text = "Randomize Helth of Zombies",
 			---@type Type|integer
