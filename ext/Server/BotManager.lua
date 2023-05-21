@@ -170,16 +170,16 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 		return
 	end
 
-	if(p_Soldier.player.teamId == Config.BotTeam) then
-		if (p_Info.isBulletDamage and p_Info.boneIndex == 1) then                                  -- headshot
+	if (p_Soldier.player.teamId == Config.BotTeam) then
+		if (p_Info.isBulletDamage and p_Info.boneIndex == 1) then     -- headshot
 			p_Info.damage = p_Info.damage * Config.BotHeadshotDamageMultiplier -- headshot multiplier is 2x by default
 		end
-	
+
 		if (p_Info.isExplosionDamage or p_Info.isDemolitionDamage) then
 			p_Info.damage = p_Info.damage * Config.BotExplosionDamageMultiplier
 		end
 	end
-	
+
 
 	-- This is a bot.
 	if m_Utilities:isBot(p_Soldier.player) then
@@ -762,12 +762,15 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 	-- Customization of health of bot.
 	local s_RandomValueOfBot = MathUtils:GetRandom(0.0, 1.0)
 	p_Bot._RandomValueOfBot = s_RandomValueOfBot
+
+	-- TODO: randomize some health again?
+	-- if Config.RandomHealthOfZombies then
+	-- 	s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
+	-- else
+	-- 	s_BotSoldier.maxHealth = maxHealthValue
+	-- end	
+
 	if p_Bot.m_Kit == BotKits.Assault then
-		-- if Config.RandomHealthOfZombies then
-		-- 	s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
-		-- else
-		-- 	s_BotSoldier.maxHealth = maxHealthValue
-		-- end
 		s_BotSoldier.maxHealth = maxHealthValue
 	end
 
@@ -818,44 +821,40 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		p_Bot._ZombieSpeedValue = BotMoveSpeeds.Normal
 	end
 
-	-- Engineers can jump high
-	if p_Bot.m_Kit == BotKits.Engineer then
-		local s_MaxJumpValue = Config.MaxHighJumpSpeed
-		local s_MinJumpValue = Config.MinHighJumpSpeed
-		if Globals.SpawnMode == SpawnModes.wave_spawn then
-			s_MaxJumpValue = Globals.MaxJumpSpeedValue
-			s_MinJumpValue = Globals.MinJumpSpeedValue
-		end
-
-		p_Bot._HighJumpSpeed = s_MaxJumpValue
-		-- if Config.RandomJumpSpeedOfZombies then
-		-- 	p_Bot._HighJumpSpeed = s_MinJumpValue + (s_RandomValueOfBot * (s_MaxJumpValue - s_MinJumpValue))
-		-- else
-		-- 	p_Bot._HighJumpSpeed = s_MaxJumpValue
-		-- end
+	local s_MaxJumpValue = Config.MaxHighJumpSpeed
+	local s_MinJumpValue = Config.MinHighJumpSpeed
+	if Globals.SpawnMode == SpawnModes.wave_spawn then
+		s_MaxJumpValue = Globals.MaxJumpSpeedValue
+		s_MinJumpValue = Globals.MinJumpSpeedValue
 	end
 
+	-- Engineers can jump high
+	if p_Bot.m_Kit == BotKits.Engineer then
+		p_Bot._HighJumpSpeed = s_MaxJumpValue
+	else
+		p_Bot._HighJumpSpeed = s_MinJumpValue
+	end
+	-- TODO: some randomized values for the other bots?
+
 	local s_SpeedValue = 0.0
+	local s_MaxSpeedValue = Config.SpeedFactorAttack
+	local s_MinSpeedValue = Config.MinSpeedFactorAttack
+	if Globals.SpawnMode == SpawnModes.wave_spawn then
+		s_MaxSpeedValue = Globals.MaxSpeedAttackValue
+		s_MinSpeedValue = Globals.MinSpeedAttackValue
+	end
+
 	-- Recons can sprint faster
 	if p_Bot.m_Kit == BotKits.Recon then
-		local s_MaxSpeedValue = Config.SpeedFactorAttack
-		local s_MinSpeedValue = Config.MinSpeedFactorAttack
-		if Globals.SpawnMode == SpawnModes.wave_spawn then
-			s_MaxSpeedValue = Globals.MaxSpeedAttackValue
-			s_MinSpeedValue = Globals.MinSpeedAttackValue
-		end
-		-- if Config.RandomAttackSpeedOfZombies then
-		-- 	s_SpeedValue = s_MinSpeedValue + (s_RandomValueOfBot * (s_MaxSpeedValue - s_MinSpeedValue))
-		-- else
-		-- 	s_SpeedValue = s_MaxSpeedValue
-		-- end
 		s_SpeedValue = s_MaxSpeedValue
-
 		p_Bot._SpeedFactorAttack = s_SpeedValue
+	else
+		p_Bot._SpeedFactorAttack = s_MinSpeedValue
 	end
 	if s_SpeedValue < 1.0 then
 		s_SpeedValue = 1.0 -- default sprint behaviour, don't sptint later
 	end
+	-- TODO: some randomized values for the other bots?
 
 	local s_EntityIterator = EntityManager:GetIterator('PropertyCastEntity')
 	local s_Entity = s_EntityIterator:Next()
