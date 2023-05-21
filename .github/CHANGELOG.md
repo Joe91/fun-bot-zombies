@@ -9,7 +9,7 @@ This is the changelog for the version V0.8 Don't forget to [join us on Discord](
 ## Changelog
 
 ### New features / improvements
-* seperate zombie-classes added
+* seperate zombie-classes added (with option to use classes or not)
 ** Engineers can jumpclimb over obstacles
 ** Supports often drop a nade on death
 ** Assaults have more hitpoints
