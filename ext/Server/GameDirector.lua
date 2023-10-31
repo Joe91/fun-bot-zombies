@@ -87,33 +87,33 @@ end
 ---VEXT Server CapturePoint:Captured Event
 ---@param p_CapturePoint CapturePointEntity|Entity
 function GameDirector:OnCapturePointCaptured(p_CapturePoint)
-	p_CapturePoint = CapturePointEntity(p_CapturePoint)
-	local s_ObjectiveName = self:_TranslateObjective(p_CapturePoint.transform.trans, p_CapturePoint.name)
-	self:_UpdateObjective(s_ObjectiveName, {
-		team = p_CapturePoint.team,
-		isAttacked = p_CapturePoint.isAttacked
-	})
+	-- p_CapturePoint = CapturePointEntity(p_CapturePoint)
+	-- local s_ObjectiveName = self:_TranslateObjective(p_CapturePoint.transform.trans, p_CapturePoint.name)
+	-- self:_UpdateObjective(s_ObjectiveName, {
+	-- 	team = p_CapturePoint.team,
+	-- 	isAttacked = p_CapturePoint.isAttacked
+	-- })
 
-	local s_Objective = self:_GetObjectiveObject(s_ObjectiveName)
+	-- local s_Objective = self:_GetObjectiveObject(s_ObjectiveName)
 
-	if s_Objective == nil then
-		return
-	end
+	-- if s_Objective == nil then
+	-- 	return
+	-- end
 
-	m_Logger:Write('GameDirector:_onCapture: ' .. s_ObjectiveName)
-	m_Logger:Write('self.CurrentAssignedCount: ' .. m_Utilities:dump(s_Objective.assigned, true))
+	-- m_Logger:Write('GameDirector:_onCapture: ' .. s_ObjectiveName)
+	-- m_Logger:Write('self.CurrentAssignedCount: ' .. m_Utilities:dump(s_Objective.assigned, true))
 
-	for l_BotTeam, l_Bots in pairs(self.m_BotsByTeam) do
-		for i = 1, #l_Bots do
-			if l_Bots[i]:GetObjective() == s_Objective.name and s_Objective.team == l_BotTeam then
-				m_Logger:Write('Bot completed objective: ' ..
-					l_Bots[i].m_Name .. ' (team: ' .. l_BotTeam .. ') -> ' .. s_Objective.name)
+	-- for l_BotTeam, l_Bots in pairs(self.m_BotsByTeam) do
+	-- 	for i = 1, #l_Bots do
+	-- 		if l_Bots[i]:GetObjective() == s_Objective.name and s_Objective.team == l_BotTeam then
+	-- 			m_Logger:Write('Bot completed objective: ' ..
+	-- 				l_Bots[i].m_Name .. ' (team: ' .. l_BotTeam .. ') -> ' .. s_Objective.name)
 
-				l_Bots[i]:SetObjective()
-				s_Objective.assigned[l_BotTeam] = math.max(s_Objective.assigned[l_BotTeam] - 1, 0)
-			end
-		end
-	end
+	-- 			l_Bots[i]:SetObjective()
+	-- 			s_Objective.assigned[l_BotTeam] = math.max(s_Objective.assigned[l_BotTeam] - 1, 0)
+	-- 		end
+	-- 	end
+	-- end
 end
 
 ---VEXT Server CapturePoint:Lost Event
@@ -198,115 +198,6 @@ function GameDirector:OnEngineUpdate(p_DeltaTime)
 
 		if s_MaxAssigns[i] > Registry.GAME_DIRECTOR.MAX_ASSIGNED_LIMIT then
 			s_MaxAssigns[i] = Registry.GAME_DIRECTOR.MAX_ASSIGNED_LIMIT
-		end
-	end
-
-	-- Check objective statuses.
-	for l_BotTeam, l_Bots in pairs(self.m_BotsByTeam) do
-		for _, l_Objective in pairs(self.m_AllObjectives) do
-			l_Objective.assigned[l_BotTeam] = 0
-		end
-	end
-
-	for l_BotTeam, l_Bots in pairs(self.m_BotsByTeam) do
-		for _, l_Bot in pairs(l_Bots) do
-			if l_Bot:GetObjective() == '' then
-				if not l_Bot.m_Player.soldier then
-					goto continue_inner_loop
-				end
-
-				-- Find the closest objective for bot.
-				local s_ClosestDistance = nil
-				local s_ClosestObjective = nil
-
-				for _, l_Objective in pairs(self.m_AllObjectives) do
-					if l_Objective.subObjective then
-						goto continue_inner_inner_loop
-					end
-
-					if l_Objective.isBase or not l_Objective.active or l_Objective.destroyed then
-						goto continue_inner_inner_loop
-					end
-
-					-- Assign vehicle-objectives if possible.
-					if Config.UseVehicles and
-						l_Objective.isEnterVehiclePath and
-						l_Objective.team == l_BotTeam and
-						l_Objective.assigned[l_BotTeam] == 0 and
-						not l_Bot.m_InVehicle then
-						if l_Bot:SetObjectiveIfPossible(l_Objective.name) then
-							l_Objective.assigned[l_BotTeam] = 1
-							m_Logger:Write("assigned bot to " .. l_Objective.name)
-							goto continue_inner_loop
-						end
-					end
-
-					if l_Objective.team == l_BotTeam or l_Objective.isEnterVehiclePath then
-						goto continue_inner_inner_loop
-					end
-
-					if l_Objective.assigned[l_BotTeam] < s_MaxAssigns[l_BotTeam] then
-						local s_Distance = self:_GetDistanceFromObjective(l_Objective.name, l_Bot.m_Player.soldier.worldTransform.trans)
-
-						if s_ClosestDistance == nil or s_ClosestDistance > s_Distance then
-							s_ClosestDistance = s_Distance
-							s_ClosestObjective = l_Objective.name
-						end
-					end
-
-					::continue_inner_inner_loop::
-				end
-
-				if s_ClosestObjective ~= nil then
-					local s_Objective = self:_GetObjectiveObject(s_ClosestObjective)
-					l_Bot:SetObjective(s_ClosestObjective)
-					m_Logger:Write("Team " ..
-						tostring(l_BotTeam) .. " with " .. l_Bot.m_Name .. " gets this objective: " .. s_ClosestObjective)
-					s_Objective.assigned[l_BotTeam] = s_Objective.assigned[l_BotTeam] + 1
-				end
-			else
-				if not l_Bot.m_Player.soldier then
-					l_Bot:SetObjective() -- Reset objective on death.
-					goto continue_inner_loop
-				end
-
-				local s_Objective = self:_GetObjectiveObject(l_Bot:GetObjective())
-
-				if s_Objective.isEnterVehiclePath then
-					if not s_Objective.active or s_Objective.destroyed or l_Bot.m_InVehicle then
-						l_Bot:SetObjective()
-					end
-
-					goto continue_inner_loop
-
-				end
-
-
-				local s_ParentObjective = self:_GetObjectiveFromSubObj(s_Objective.name)
-				s_Objective.assigned[l_BotTeam] = s_Objective.assigned[l_BotTeam] + 1
-
-				if s_ParentObjective ~= nil then
-					local s_TempObjective = self:_GetObjectiveObject(s_ParentObjective)
-
-					if s_TempObjective.active and not s_TempObjective.destroyed then
-						s_TempObjective.assigned[l_BotTeam] = s_TempObjective.assigned[l_BotTeam] + 1
-
-						-- Check for leave of subObjective.
-						if not self:_UseSubobjective(l_BotTeam, s_Objective.name) then
-							l_Bot:SetObjective(s_ParentObjective)
-						end
-					end
-				end
-
-				if s_Objective.isBase or not s_Objective.active or s_Objective.destroyed or (s_Objective.team == l_BotTeam and not s_Objective.isEnterVehiclePath) then
-					l_Bot:SetObjective()
-				end
-				if s_Objective.team == l_BotTeam and s_Objective.isEnterVehiclePath and l_Bot.m_InVehicle then
-					l_Bot:SetObjective()
-				end
-			end
-
-			::continue_inner_loop::
 		end
 	end
 end
@@ -532,7 +423,6 @@ function GameDirector:CheckForExecution(p_Point, p_TeamId, p_InVehicle)
 		end
 
 		return false
-
 	elseif s_Action.type == "vehicle" then
 		if p_InVehicle then
 			return false
@@ -548,7 +438,6 @@ function GameDirector:CheckForExecution(p_Point, p_TeamId, p_InVehicle)
 			end
 		end
 		return false
-
 	elseif s_Action.type == "exit" then
 		if p_InVehicle then
 			return true
@@ -701,7 +590,6 @@ function GameDirector:GetSpawnPath(p_TeamId, p_SquadId, p_OnlyBase)
 					end
 				end
 			else
-
 				-- Check for vehicle of real player.
 				if l_Player.controlledControllable ~= nil and not l_Player.controlledControllable:Is("ServerSoldierEntity") then
 					if l_Player.controlledEntryId == 0 then
@@ -821,7 +709,6 @@ function GameDirector:GetSpawnPath(p_TeamId, p_SquadId, p_OnlyBase)
 			s_SpawnAtBase = MathUtils:GetRandomInt(1, 100) <= Registry.BOT_SPAWN.PROBABILITY_BASE_VEHICLE_SPAWN
 		else
 			s_SpawnAtBase = MathUtils:GetRandomInt(1, 100) <= Registry.BOT_SPAWN.PROBABILITY_BASE_SPAWN
-
 		end
 
 		if s_SpawnAtBase then
@@ -948,28 +835,6 @@ function GameDirector:IsVehicleEnterPath(p_Objective)
 
 	if s_TempObjective ~= nil and s_TempObjective.isEnterVehiclePath then
 		return true
-	end
-
-	return false
-end
-
-function GameDirector:UseSubobjective(p_BotName, p_BotTeam, p_Objective)
-	local s_TempObjective = self:_GetObjectiveObject(p_Objective)
-
-	if s_TempObjective ~= nil and s_TempObjective.subObjective then -- Is valid getSubObjective.
-		if s_TempObjective.active and not s_TempObjective.destroyed then
-			if self:_UseSubobjective(p_BotTeam, p_Objective) then
-				if s_TempObjective.assigned[p_BotTeam] < 2 then
-					s_TempObjective.assigned[p_BotTeam] = s_TempObjective.assigned[p_BotTeam] + 1
-					local s_Bot = g_BotManager:GetBotByName(p_BotName)
-
-					if s_Bot ~= nil then
-						s_Bot:SetObjective(p_Objective)
-						return true
-					end
-				end
-			end
-		end
 	end
 
 	return false
@@ -1311,23 +1176,6 @@ function GameDirector:_GetObjectiveFromSubObj(p_SubObjective)
 			end
 		end
 	end
-end
-
-function GameDirector:_UseSubobjective(p_BotTeam, p_ObjectiveName)
-	local s_Use = false
-	local s_Objective = self:_GetObjectiveObject(p_ObjectiveName)
-
-	if s_Objective ~= nil and s_Objective.subObjective then
-		if s_Objective.active and not s_Objective.destroyed then
-			if p_BotTeam == TeamId.Team1 and s_Objective.team == TeamId.TeamNeutral then
-				s_Use = true -- Attacking Team.
-			elseif p_BotTeam == TeamId.Team2 and s_Objective.isAttacked then
-				s_Use = true -- Defending Team.
-			end
-		end
-	end
-
-	return s_Use
 end
 
 if g_GameDirector == nil then

@@ -45,6 +45,11 @@ Language:add(code, "FOV of Bots", "ボットのFOV")
 Language:add(code, "Degrees of FOV of Bot", "ボットの視野角")
 Language:add(code, "FOV of Bots Verticle", "ボット垂直の FOV")
 Language:add(code, "Degrees of FOV of Bot in vertical direction", "垂直方向のボットの FOV の角度")
+<<<<<<< Updated upstream
+=======
+Language:add(code, "Max Shoot-Distance No Sniper", "最大射撃距離 スナイパーなし")
+Language:add(code, "Meters before bots (not sniper) will start shooting at players", "ボット (スナイパーではない) がプレイヤーを撃ち始める数メートル前")
+>>>>>>> Stashed changes
 Language:add(code, "Max Distance a normal soldier shoots back if Hit", "ヒットした場合、通常の兵士が撃ち返す最大距離")
 Language:add(code, "Meters until bots (not sniper) shoot back if hit", "攻撃を受けた場合、ボット (スナイパーではない) が撃ち返すまでのメートル")
 Language:add(code, "Bot Attack Mode", "ボット攻撃モード")
@@ -291,6 +296,10 @@ Language:add(code, "Zombies sprint", "ゾンビスプリント")
 Language:add(code, "Zombies can sprint when walking around", "ゾンビは歩き回ると全力疾走できる")
 Language:add(code, "Bot Max Health at spawn", "スポーン時のボットの最大ヘルス")
 Language:add(code, "Max health of bot at spawn(default 100.0)", "スポーン時のボットの最大ヘルス (デフォルト 100.0)")
+<<<<<<< Updated upstream
+=======
+Language:add(code, "Bot Min Health at spawn", "スポーン時のボット最小ヘルス")
+>>>>>>> Stashed changes
 Language:add(code, "Min health of bot at spawn (default 100.0)", "スポーン時のボットの最小ヘルス (デフォルト 100.0)")
 Language:add(code, "Bot Min Health at spawn", "スポーン時のボット最小ヘルス")
 Language:add(code, "Damage multiplier for shooting bots in the head", "頭の中でボットを撃つためのダメージ乗数")
@@ -329,6 +338,7 @@ Language:add(code, "Bot min time Attack one player", "ボットの最小時間 1
 Language:add(code, "The minimum time a bot attacks one player for", "ボットが 1 人のプレイヤーを攻撃する最小時間")
 Language:add(code, "Bot attack mode duration", "ボット攻撃モードの持続時間")
 Language:add(code, "The minimum time a zombie-bot tries to attack a player - recommended minimum 15,", "ゾンビボットがプレイヤーを攻撃しようとする最小時間 - 推奨される最小値は 15 です。")
+<<<<<<< Updated upstream
 Language:add(code, "Zombies Drop Nades", "ゾンビドロップナデス")
 Language:add(code, "Zombies drop randomly nades", "ゾンビはランダムにナデをドロップします")
 Language:add(code, "Use Zombie Classes", "ゾンビクラスを使用する")
@@ -340,3 +350,5 @@ Language:add(code, "Max Shoot-Distance", "最大射撃距離")
 Language:add(code, "Meters before bots will start shooting at players", "ボットがプレイヤーに向けて射撃を開始する数メートル前")
 Language:add(code, "Max Shoot-Height", "最大シュート高さ")
 Language:add(code, "Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance", "ボットが近づいたときの最大高さ。距離に応じてスケールされ、MaxShootDistance では 0 になります。")
+=======
+>>>>>>> Stashed changes

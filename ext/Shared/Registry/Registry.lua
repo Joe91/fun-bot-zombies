@@ -22,7 +22,7 @@ Registry = {
 		-- Use load of Bundle to fix Bug of weapons disappearing (thanks to Lesley!) !!! THIS MIGHT CAUSE CRASHES !!!
 		USE_LOAD_BUNDLE_BUGFIX = false,
 		-- Valid keys can be found here: https://docs.veniceunleashed.net/vext/ref/fb/inputdevicekeys/.
-		BOT_COMMAND_KEY = InputDeviceKeys.IDK_LeftAlt,
+		BOT_COMMAND_KEY = InputDeviceKeys.IDK_None,
 	},
 	-- Version and Release related variables.
 	-- Variables related to the current build version, version and the type of version.
@@ -35,7 +35,11 @@ Registry = {
 		-- Patch version.
 		VERSION_PATCH = 0,
 		-- Additional label for pre-releases and build metadata.
+<<<<<<< Updated upstream
 		VERSION_LABEL = "dev3",
+=======
+		VERSION_LABEL = "dev2",
+>>>>>>> Stashed changes
 		-- Current version type of this build.
 		VERSION_TYPE = VersionType.DevBuild,
 		-- The Version used for the Update-Check.
@@ -48,23 +52,23 @@ Registry = {
 		-- Distance a bot tries to revive a player.
 		REVIVE_DISTANCE = 30.0,
 		-- The number of attack-checks done per cycle.
-		MAX_CHECKS_PER_CYCLE = 10,
+		MAX_CHECKS_PER_CYCLE = 12,
 		-- Time bots will not attack a player when spawned.
-		SPAWN_PROTECTION = 1.5,
+		SPAWN_PROTECTION = 0.0,
 	},
 	-- Variables related to raycasting.
 	GAME_RAYCASTING = {
 		MAX_RAYCASTS_PER_PLAYER_PER_CYCLE = 3,
 		-- Max Raycasts for Bot-Bot Attack per player and cycle. Needs to be smaller than max_raycasts.
-		MAX_RAYCASTS_PER_PLAYER_BOT_BOT = 2,
+		MAX_RAYCASTS_PER_PLAYER_BOT_BOT = 0,
 		-- How often get the nodes calculated.
-		UPDATE_INTERVAL_NODEEDITOR = 0.03,
+		UPDATE_INTERVAL_NODEEDITOR = 0.04,
 		-- Raycast Interval of client for different raycasts.
-		RAYCAST_INTERVAL_ENEMY_CHECK = 0.03,
+		RAYCAST_INTERVAL_ENEMY_CHECK = 0.04,
 		-- How often are the connections for a bot-bot-attack checked.
-		BOT_BOT_CHECK_INTERVAL = 0.05,
+		BOT_BOT_CHECK_INTERVAL = 0.06,
 		-- Max checks per cycle.
-		BOT_BOT_MAX_CHECKS = 30
+		BOT_BOT_MAX_CHECKS = 25
 	},
 	GAME_DIRECTOR = {
 		UPDATE_OBJECTIVES_CYCLE = 1.5,
@@ -110,9 +114,14 @@ Registry = {
 		VEHICLE_SEAT_CHECK_CYCLE_TIME = 4.0,
 	},
 	ZOMBIES = {
+<<<<<<< Updated upstream
 		PROBABILITY_DROP_AMMO = 25,
 		PROBABILITY_DROP_NADE = 35,
 		PROBABILITY_GO_FOR_DIRECT_ATTACK = 50,
+=======
+		PROBABILITY_DROP_AMMO = 10,
+		PROBABILITY_GO_FOR_DIRECT_ATTACK = 65,
+>>>>>>> Stashed changes
 		WEIGHT_PRONE = 2,
 		WEIGHT_CROUCH = 2,
 		WEIGHT_WALK = 2,
@@ -125,11 +134,15 @@ Registry = {
 		-- Update cycle fast.
 		BOT_FAST_UPDATE_CYCLE = 0.03, -- Equals 30 fps.
 		-- Update cycle.
-		BOT_UPDATE_CYCLE = 0.1,
+		BOT_UPDATE_CYCLE = 0.06,
 		-- - distance the bots have to reach in height to continue with next Waypoint.
 		TARGET_HEIGHT_DISTANCE_WAYPOINT = 1.5,
 		-- Chance that the bot will teleport when they are stuck.
+<<<<<<< Updated upstream
 		PROBABILITY_TELEPORT_IF_STUCK = 70,
+=======
+		PROBABILITY_TELEPORT_IF_STUCK = 50,
+>>>>>>> Stashed changes
 		-- Chance that the bot will teleport when they are stuck in a vehicle.
 		PROBABILITY_TELEPORT_IF_STUCK_IN_VEHICLE = 20,
 		-- At the end of an attack cycle, chance of throwing a grenade.
@@ -160,7 +173,7 @@ Registry = {
 	BOT_SPAWN = {
 		-- Time between a level loading and the first bot spawning.
 		-- Note: Must be big enough to register inputActiveEvents (> 1.0)
-		FIRST_SPAWN_DELAY = 5.0,
+		FIRST_SPAWN_DELAY = 1.0,
 		-- Probability of a bot spawning on a member of the same squad.
 		PROBABILITY_SQUADMATE_SPAWN = 40,
 		-- Probability of a bot spawning in the vehicle of a bot of the same squad.

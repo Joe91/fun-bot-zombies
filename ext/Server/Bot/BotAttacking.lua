@@ -7,16 +7,23 @@ local m_Utilities = require('__shared/Utilities')
 ---@type Vehicles
 local m_Vehicles = require("Vehicles")
 
+local attackingDuration = 0
+
 function BotAttacking:__init()
 	-- Nothing to do.
 end
 
 ---@param p_Bot Bot
 local function _DefaultAttackingAction(p_Bot)
+<<<<<<< Updated upstream
 	if not p_Bot._ShootPlayer.soldier or not p_Bot._Shoot or p_Bot._ShootModeTimer >= Config.BotAttackDuration or (p_Bot:IsStuck() and p_Bot._AttackTimer > 15) then
+=======
+	if not p_Bot._ShootPlayer.soldier or not p_Bot._Shoot or p_Bot._ShootModeTimer >= Config.BotAttackStuckDuration or (p_Bot:IsStuck() and p_Bot._AttackTimer > 15) then
+>>>>>>> Stashed changes
 		p_Bot._TargetPitch = 0.0
 		p_Bot._AttackTimer = 0
 		p_Bot:AbortAttack()
+		p_Bot._AttackTimer = 0
 		return
 	end
 
@@ -31,6 +38,7 @@ local function _DefaultAttackingAction(p_Bot)
 		p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeFastMelee, 1)
 		p_Bot:_SetInput(EntryInputActionEnum.EIAMeleeAttack, 1)
 		p_Bot._MeleeCooldownTimer = Config.MeleeAttackCoolDown
+		--p_Bot.m_Player.soldier:SetPose(p_Bot._ShootPlayer.soldier.pose, true, true)
 	else
 		if p_Bot._MeleeCooldownTimer < 0.0 then
 			p_Bot._MeleeCooldownTimer = 0.0
@@ -57,6 +65,10 @@ local function _DefaultAttackingAction(p_Bot)
 			OptValue = 0,
 		}
 
+		if p_Bot._ZombieSpeedValue == BotMoveSpeeds.VerySlowProne then
+			s_Point.SpeedMode = BotMoveSpeeds.VerySlowProne
+		end
+
 		table.insert(p_Bot._ShootWayPoints, s_Point)
 
 		local s_Trans = p_Bot._ShootPlayer.soldier.worldTransform.trans:Clone()
@@ -75,11 +87,16 @@ function BotAttacking:UpdateAttacking(p_Bot)
 	if not p_Bot._ShootPlayer then
 		p_Bot._AttackTimer = 0
 		p_Bot:AbortAttack()
+		p_Bot._AttackTimer = 0
 		return
 	end
 
-	_DefaultAttackingAction(p_Bot)
 	p_Bot._AttackTimer = p_Bot._AttackTimer + Registry.BOT.BOT_UPDATE_CYCLE
+	_DefaultAttackingAction(p_Bot)
+<<<<<<< Updated upstream
+	p_Bot._AttackTimer = p_Bot._AttackTimer + Registry.BOT.BOT_UPDATE_CYCLE
+=======
+>>>>>>> Stashed changes
 end
 
 if g_BotAttacking == nil then

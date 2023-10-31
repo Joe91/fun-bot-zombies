@@ -34,9 +34,15 @@ function BotSpawner:RegisterVars()
 	self._BotsWithoutPath = {}
 
 	self._CurrentSpawnWave = 0
+	self._LastSuperWave = 0
 	self._SpawnedBotsInCurrentWave = 0
 	self._BotsToSpawnInWave = 0
 	self._BotsLeftInCurrentWave = 0
+<<<<<<< Updated upstream
+=======
+	self._BotKit = nil
+	self._KnifeWeapon = nil
+>>>>>>> Stashed changes
 end
 
 -- =============================================
@@ -57,6 +63,7 @@ function BotSpawner:OnLevelLoaded(p_Round)
 	-- don't switch teams
 	--	self:_SwitchTeams()
 	self._CurrentSpawnWave = 0
+	self._LastSuperWave = 0
 	self._SpawnedBotsInCurrentWave = 0
 	self._BotsToSpawnInWave = 0
 	self._BotsLeftInCurrentWave = 0
@@ -72,6 +79,11 @@ function BotSpawner:OnLevelLoaded(p_Round)
 	Globals.MaxJumpSpeedValue = Config.MaxHighJumpSpeed
 	Globals.MinJumpSpeedValue = Config.MinHighJumpSpeed
 	Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots
+<<<<<<< Updated upstream
+=======
+	self._BotKit = ResourceManager:SearchForDataContainer('Characters/Soldiers/MpSoldier')
+	self._KnifeWeapon = ResourceManager:SearchForDataContainer('Weapons/Knife/U_Knife')
+>>>>>>> Stashed changes
 end
 
 ---VEXT Shared Level:Destroy Event
@@ -117,7 +129,7 @@ function BotSpawner:OnUpdateManagerUpdate(p_DeltaTime, p_UpdatePass)
 	end
 
 	if #self._SpawnSets > 0 then
-		if self._BotSpawnTimer > Config.AdditionalBotSpawnDelay then -- Time to wait between spawn. 0.2 works
+		if self._BotSpawnTimer > MathUtils:Clamp(#self._SpawnSets * 0.015, 0, 0.5) then -- Time to wait between spawn. 0.2 works
 			self._BotSpawnTimer = 0.0
 			local s_SpawnSet = table.remove(self._SpawnSets)
 			self:_SpawnSingleWayBot(s_SpawnSet.m_PlayerVarOfBot, s_SpawnSet.m_UseRandomWay, s_SpawnSet.m_ActiveWayIndex,
@@ -269,6 +281,7 @@ end
 ---@param p_BotName string
 function BotSpawner:OnRespawnBot(p_BotName)
 	local s_Bot = m_BotManager:GetBotByName(p_BotName)
+	if s_Bot == nil then return end
 	local s_SpawnMode = s_Bot:GetSpawnMode()
 
 	if s_SpawnMode == BotSpawnModes.RespawnFixedPath then -- Fixed Way.
@@ -290,21 +303,52 @@ end
 
 function BotSpawner:UpdateWaveConfig()
 	local s_WaveValue = self._CurrentSpawnWave - 1
+	local s_DifficultyIncreaseItterations = 1
 	if s_WaveValue < 0 then
 		s_WaveValue = 0
 	end
+<<<<<<< Updated upstream
 	Globals.MaxHealthValue = Config.BotMaxHealth + (s_WaveValue * Config.IncrementMaxHealthPerWave)
 	Globals.MinHealthValue = Config.BotMinHealth + (s_WaveValue * Config.IncrementMaxHealthPerWave)
 	Globals.DamageFactorZombies = Config.DamageFactorKnife + (s_WaveValue * Config.IncrementDamageFactorPerWave)
 	Globals.MaxSpeedAttackValue = Config.SpeedFactorAttack + (s_WaveValue * Config.IncrementMaxSpeedPerWave)
 	Globals.MinSpeedAttackValue = Config.MinSpeedFactorAttack + (s_WaveValue * Config.IncrementMaxSpeedPerWave)
+=======
+	if self._CurrentSpawnWave == self._LastSuperWave + 5 then
+		s_DifficultyIncreaseItterations = s_DifficultyIncreaseItterations + 3
+		self._LastSuperWave = self._CurrentSpawnWave
+		print("Super wave! " .. self._CurrentSpawnWave)
+	else
+		print("Wave " .. self._CurrentSpawnWave)
+	end
+
+	Globals.MaxHealthValue = Config.BotMaxHealth + ((s_WaveValue * Config.IncrementMaxHealthPerWave) * s_DifficultyIncreaseItterations)
+	Globals.MinHealthValue = Config.BotMinHealth + ((s_WaveValue * Config.IncrementMaxHealthPerWave) * s_DifficultyIncreaseItterations)
+	Globals.DamageFactorZombies = Config.DamageFactorKnife + ((s_WaveValue * Config.IncrementDamageFactorPerWave) * s_DifficultyIncreaseItterations)
+	Globals.MaxSpeedAttackValue = MathUtils:Clamp(Config.SpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.SpeedFactorAttack, 1.02)
+	Globals.MinSpeedAttackValue = MathUtils:Clamp(Config.MinSpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.MinSpeedFactorAttack, 1.02)
+>>>>>>> Stashed changes
 	Globals.MaxJumpSpeedValue = Config.MaxHighJumpSpeed + (s_WaveValue * Config.IncrementJumpSpeedPerWave)
 	Globals.MinJumpSpeedValue = Config.MinHighJumpSpeed + (s_WaveValue * Config.IncrementJumpSpeedPerWave)
 	self._BotsToSpawnInWave = Config.FirstWaveCount + (s_WaveValue * Config.IncrementZombiesPerWave)
 	Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots - (s_WaveValue * Config.SubtractSpawnDistancePerWave)
+<<<<<<< Updated upstream
+=======
+	Globals.AmmoDropChance = Registry.ZOMBIES.PROBABILITY_DROP_AMMO + (s_WaveValue * Config.IncrementAmmoDropChancePerWave)
+
+	local waveData = {
+		current = self._CurrentSpawnWave,
+		max = Config.Waves
+	}
+	NetEvents:Broadcast('FunBots:WaveCount', waveData)
+	Events:Dispatch('FunBots:WaveCount', waveData)
+>>>>>>> Stashed changes
 end
 
 function BotSpawner:UpdateBotAmountAndTeam()
+	local botsLeft = (self._BotsToSpawnInWave - self._SpawnedBotsInCurrentWave) + m_BotManager:GetAliveBotCount() - Config.ZombiesAliveForNextWave
+	NetEvents:BroadcastUnreliable('FunBots:BotCount', MathUtils:Clamp(botsLeft, 0, self._BotsToSpawnInWave))
+	Events:Dispatch('FunBots:BotCount', MathUtils:Clamp(botsLeft, 0, self._BotsToSpawnInWave))
 	-- Keep Slot for next player.
 	if Config.KeepOneSlotForPlayers then
 		local s_PlayerLimit = Globals.MaxPlayers - 1
@@ -366,11 +410,14 @@ function BotSpawner:UpdateBotAmountAndTeam()
 
 
 	if Globals.SpawnMode == SpawnModes.wave_spawn then
+		local s_PlayerLimit = Globals.MaxPlayers - 1
+		local s_SlotsLeft = s_PlayerLimit - (PlayerManager:GetPlayerCount())
+
 		if self._CurrentSpawnWave == 0 then
 			Globals.RespawnWayBots = false
 			m_BotManager:DestroyAll()
-			ChatManager:Yell("First Wave starts in 10 seconds", 7.0)
-			self._FirstSpawnDelay = 10
+			--ChatManager:Yell("First Wave starts in 10 seconds", 7.0)
+			self._FirstSpawnDelay = 0
 			self._CurrentSpawnWave = 1
 			Globals.MaxHealthValue = Config.BotMaxHealth
 			Globals.MinHealthValue = Config.BotMinHealth
@@ -382,12 +429,11 @@ function BotSpawner:UpdateBotAmountAndTeam()
 			self._BotsToSpawnInWave = Config.FirstWaveCount
 			Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots
 		end
+
 		if Config.KillRemainingZombiesAfterWave and self._SpawnedBotsInCurrentWave == 0 then
 			m_BotManager:KillAll()
 		end
 		if self._SpawnedBotsInCurrentWave < self._BotsToSpawnInWave then
-			local s_PlayerLimit = Globals.MaxPlayers - 1
-			local s_SlotsLeft = s_PlayerLimit - (PlayerManager:GetPlayerCount())
 			local numberOfBotsToSpawn = self._BotsToSpawnInWave - self._SpawnedBotsInCurrentWave
 			if numberOfBotsToSpawn > s_SlotsLeft then
 				numberOfBotsToSpawn = s_SlotsLeft
@@ -397,9 +443,20 @@ function BotSpawner:UpdateBotAmountAndTeam()
 			-- all bots spawned. Check for alive bots
 			if m_BotManager:GetAliveBotCount() <= Config.ZombiesAliveForNextWave then
 				if Config.Waves == 0 then
+<<<<<<< Updated upstream
 					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. " finished, new wave starts in a few seconds", Config.TimeBetweenWaves)
 				else
 					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. "/" .. Config.Waves .. " finished, new wave starts in a " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
+=======
+					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. " finished, new wave starts in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
+					ChatManager:SendMessage("Wave " .. self._CurrentSpawnWave .. " finished, new wave starts in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
+				elseif self._CurrentSpawnWave == Config.Waves then
+					ChatManager:Yell("Final wave will start in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
+					ChatManager:SendMessage("Final wave will start in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
+				else
+					ChatManager:Yell("Wave " .. self._CurrentSpawnWave + 1 .. "/" .. Config.Waves .. " will start in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
+					ChatManager:SendMessage("Wave " .. self._CurrentSpawnWave + 1 .. "/" .. Config.Waves .. " will start in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
+>>>>>>> Stashed changes
 				end
 
 				self._FirstSpawnDelay = Config.TimeBetweenWaves
@@ -408,6 +465,7 @@ function BotSpawner:UpdateBotAmountAndTeam()
 				self:UpdateWaveConfig()
 				if self._CurrentSpawnWave > Config.Waves then
 					GamemodeManager:HumanTeamWin()
+<<<<<<< Updated upstream
 				end
 			end
 		end
@@ -465,64 +523,11 @@ function BotSpawner:UpdateBotAmountAndTeam()
 							break
 						end
 					end
+=======
+>>>>>>> Stashed changes
 				end
 			end
 		end
-
-	-- INCREMENT WITH PLAYER.
-	elseif Globals.SpawnMode == SpawnModes.increment_with_players then
-		-- Check for bots in wrong team.
-		for i = 1, Globals.NrOfTeams do
-			if i == s_PlayerTeam and s_CountBots[i] > 0 then
-				m_BotManager:KillAll(nil, i)
-			end
-		end
-
-		local s_TargetBotCount = Config.InitNumberOfBots +
-			math.floor(((s_PlayerCount - 1) * Config.NewBotsPerNewPlayer) + 0.5)
-		local s_TargetBotCountPerEnemyTeam = s_TargetBotCount / (Globals.NrOfTeams - 1)
-
-		if s_TargetBotCountPerEnemyTeam > Globals.MaxBotsPerTeam then
-			s_TargetBotCountPerEnemyTeam = Globals.MaxBotsPerTeam
-		end
-
-		for i = 1, Globals.NrOfTeams do
-			if i ~= s_PlayerTeam then
-				if s_TeamCount[i] < s_TargetBotCountPerEnemyTeam then
-					self:SpawnWayBots(nil, s_TargetBotCountPerEnemyTeam - s_TeamCount[i], true, 0, 0, i)
-				elseif s_TeamCount[i] > s_TargetBotCountPerEnemyTeam then
-					m_BotManager:KillAll(s_TeamCount[i] - s_TargetBotCountPerEnemyTeam, i)
-				end
-			end
-		end
-
-	-- FIXED NUMBER TO SPAWN.
-	elseif Globals.SpawnMode == SpawnModes.fixed_number then
-
-		-- Check for bots in wrong team.
-		for i = 1, Globals.NrOfTeams do
-			if i == s_PlayerTeam and s_CountBots[i] > 0 then
-				m_BotManager:KillAll(nil, i)
-			end
-		end
-
-		local s_TargetBotCount = Config.InitNumberOfBots
-		local s_TargetBotCountPerEnemyTeam = s_TargetBotCount / (Globals.NrOfTeams - 1)
-
-		if s_TargetBotCountPerEnemyTeam > Globals.MaxBotsPerTeam then
-			s_TargetBotCountPerEnemyTeam = Globals.MaxBotsPerTeam
-		end
-
-		for i = 1, Globals.NrOfTeams do
-			if i ~= s_PlayerTeam then
-				if s_TeamCount[i] < s_TargetBotCountPerEnemyTeam then
-					self:SpawnWayBots(nil, s_TargetBotCountPerEnemyTeam - s_TeamCount[i], true, 0, 0, i)
-				elseif s_TeamCount[i] > s_TargetBotCountPerEnemyTeam then
-					m_BotManager:KillAll(s_TeamCount[i] - s_TargetBotCountPerEnemyTeam, i)
-				end
-			end
-		end
-
 	elseif Globals.SpawnMode == SpawnModes.manual then
 		if self._FirstSpawnInLevel then
 			for i = 1, Globals.NrOfTeams do
@@ -719,7 +724,7 @@ function BotSpawner:_SelectLoadout(p_Bot, p_SetKit)
 
 	if p_Bot.m_Player.selectedKit == nil then
 		-- SoldierBlueprint
-		p_Bot.m_Player.selectedKit = ResourceManager:SearchForInstanceByGuid(Guid('261E43BF-259B-41D2-BF3B-9AE4DDA96AD2'))
+		p_Bot.m_Player.selectedKit = self._BotKit
 	end
 
 	self:_SetKitAndAppearance(p_Bot, s_BotKit, s_BotColor)
@@ -974,7 +979,7 @@ function BotSpawner:_SpawnSingleWayBot(p_Player, p_UseRandomWay, p_ActiveWayInde
 		s_TeamId = m_BotManager:GetBotTeam()
 	end
 
-	if s_IsRespawn then
+	if s_IsRespawn and p_ExistingBot ~= nil then
 		s_TeamId = p_ExistingBot.m_Player.teamId
 		s_SquadId = p_ExistingBot.m_Player.squadId
 	else
@@ -1006,27 +1011,7 @@ function BotSpawner:_SpawnSingleWayBot(p_Player, p_UseRandomWay, p_ActiveWayInde
 				local s_SpawnEntity = nil
 				local s_Transform = LinearTransform()
 
-				if s_SpawnPoint == "SpawnAtVehicle" then
-					local s_Vehicles = g_GameDirector:GetSpawnableVehicle(s_TeamId)
-
-					for _, l_Vehicle in pairs(s_Vehicles) do
-						if l_Vehicle ~= nil then
-							s_SpawnEntity = l_Vehicle
-							break
-						end
-					end
-				elseif s_SpawnPoint == "SpawnInAa" then
-					local s_StationaryAas = g_GameDirector:GetStationaryAas(s_TeamId)
-
-					for _, l_Aa in pairs(s_StationaryAas) do
-						if l_Aa ~= nil then
-							s_SpawnEntity = l_Aa
-							break
-						end
-					end
-				end
-
-				if s_IsRespawn then
+				if s_IsRespawn and p_ExistingBot then
 					p_ExistingBot:SetVarsWay(nil, true, 0, 0, false)
 					self:_SpawnBot(p_ExistingBot, s_Transform, false)
 
@@ -1093,7 +1078,7 @@ function BotSpawner:_SpawnSingleWayBot(p_Player, p_UseRandomWay, p_ActiveWayInde
 
 		s_Transform.trans = s_SpawnPoint.Position
 
-		if s_IsRespawn then
+		if s_IsRespawn and p_ExistingBot then
 			p_ExistingBot:SetVarsWay(p_Player, p_UseRandomWay, p_ActiveWayIndex, p_IndexOnPath, s_InverseDirection)
 			self:_SpawnBot(p_ExistingBot, s_Transform, false)
 
@@ -1158,7 +1143,7 @@ function BotSpawner:_SpawnBot(p_Bot, p_Transform, p_SetKit)
 	-- Create kit and appearance.
 	if p_Bot.m_Player.selectedKit == nil then
 		-- SoldierBlueprint
-		p_Bot.m_Player.selectedKit = ResourceManager:SearchForDataContainer('Characters/Soldiers/MpSoldier') -- MpSoldier
+		p_Bot.m_Player.selectedKit = self._BotKit -- MpSoldier
 	end
 
 	self:_SetKitAndAppearance(p_Bot, s_BotKit, s_BotColor)
@@ -1212,8 +1197,8 @@ function BotSpawner:_GetSpawnPoint(p_TeamId, p_SquadId)
 		end
 
 		s_TargetNode = m_NodeCollection:Get(s_IndexOnPath, s_ActiveWayIndex)
-	-- RUSH
-	-- Spawn at base (of zone) or squad-mate.
+		-- RUSH
+		-- Spawn at base (of zone) or squad-mate.
 	elseif Globals.IsRush then
 		s_ActiveWayIndex, s_IndexOnPath, s_InvertDirection, s_VehicleToSpawnIn = g_GameDirector:GetSpawnPath(p_TeamId,
 			p_SquadId, true)
@@ -1225,8 +1210,8 @@ function BotSpawner:_GetSpawnPoint(p_TeamId, p_SquadId)
 		end
 
 		s_TargetNode = m_NodeCollection:Get(s_IndexOnPath, s_ActiveWayIndex)
-	-- TDM / GM / SCAVENGER
-	-- Spawn away from other team.
+		-- TDM / GM / SCAVENGER
+		-- Spawn away from other team.
 	else
 		while not s_ValidPointFound and s_TrysDone < s_MaximumTrys do
 			-- Get new point.
@@ -1325,7 +1310,7 @@ function BotSpawner:_SetKitAndAppearance(p_Bot, p_Kit, p_Color)
 	end
 
 	-- Get Kit and Appearance.
-	if s_TeamId % 2 == 1 then -- US
+	if s_TeamId % 2 == 1 then      -- US
 		if p_Kit == BotKits.Assault then -- Assault
 			s_Appearance = self:_FindAppearance('Us', 'Assault', s_ColorString)
 			s_SoldierKit = self:_FindKit('US', 'Assault')
@@ -1339,7 +1324,7 @@ function BotSpawner:_SetKitAndAppearance(p_Bot, p_Kit, p_Color)
 			s_Appearance = self:_FindAppearance('Us', 'Recon', s_ColorString)
 			s_SoldierKit = self:_FindKit('US', 'Recon')
 		end
-	else -- RU
+	else                           -- RU
 		if p_Kit == BotKits.Assault then -- Assault
 			s_Appearance = self:_FindAppearance('RU', 'Assault', s_ColorString)
 			s_SoldierKit = self:_FindKit('RU', 'Assault')
@@ -1376,7 +1361,6 @@ function BotSpawner:_SetPrimaryAttachments(p_UnlockWeapon, p_Attachments)
 end
 
 function BotSpawner:_GetCustomization(p_Bot, p_Kit)
-
 	local p_SoldierCustomization = CustomizeSoldierData()
 
 	local s_KnifeInput = p_Bot.m_Knife
@@ -1389,12 +1373,10 @@ function BotSpawner:_GetCustomization(p_Bot, p_Kit)
 	s_Knife.slot = WeaponSlot.WeaponSlot_7
 
 	if s_KnifeInput ~= nil then
-		local s_KnifeWeapon = ResourceManager:SearchForDataContainer(s_KnifeInput:getResourcePath())
-
-		if s_KnifeWeapon == nil then
+		if self._KnifeWeapon == nil then
 			m_Logger:Warning("Path not found: " .. s_KnifeInput:getResourcePath())
 		else
-			s_Knife.weapon = SoldierWeaponUnlockAsset(s_KnifeWeapon)
+			s_Knife.weapon = SoldierWeaponUnlockAsset(self._KnifeWeapon)
 		end
 	end
 
@@ -1463,9 +1445,8 @@ end
 ---@param p_KitName string|'"Assault"'|'"Engineer"'|'"Support"'|'"Recon"'
 ---@return DataContainer|nil
 function BotSpawner:_FindKit(p_TeamName, p_KitName)
-
 	local s_GameModeKits = {
-		'', -- Standard.
+		'',  -- Standard.
 		'_GM', -- Gun Master on XP2 Maps.
 		'_GM_XP4', -- Gun Master on XP4 Maps.
 		'_XP4', -- Copy of Standard for XP4 Maps.

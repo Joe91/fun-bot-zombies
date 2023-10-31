@@ -60,6 +60,9 @@ local function _KnifeAimingAction(p_Bot)
 
 	p_Bot._TargetPitch = s_Pitch
 	p_Bot._TargetYaw = s_Yaw
+	if p_Bot._DistanceToPlayer < (Config.DistanceForDirectAttack / 1.75) and p_Bot._FollowTargetPose then
+		p_Bot.m_Player.soldier:SetPose(p_Bot._ShootPlayer.soldier.pose, true, true)
+	end
 end
 
 ---@param p_Bot Bot
@@ -69,7 +72,6 @@ function BotAiming:UpdateAiming(p_Bot)
 	end
 
 	_KnifeAimingAction(p_Bot)
-
 end
 
 if g_BotAiming == nil then

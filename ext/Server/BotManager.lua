@@ -10,6 +10,9 @@ local m_Vehicles = require("Vehicles")
 ---@type Logger
 local m_Logger = Logger("BotManager", Debug.Server.BOT)
 
+local bp = nil
+local killedPlayers = {}
+
 function BotManager:__init()
 	---@type Bot[]
 	self._Bots = {}
@@ -21,7 +24,7 @@ function BotManager:__init()
 	---@type table<integer, EntryInput>
 	---`[Player.id] -> EntryInput`
 	self._BotInputs = {}
-	---@type string[]
+	---@type string[]MathUtils:Clamp(
 	---`playerName:string[]`
 	self._ActivePlayers = {}
 	self._BotAttackBotTimer = 0.0
@@ -32,7 +35,6 @@ function BotManager:__init()
 
 	---@type string[]
 	---`BotName[]`
-	self._BotBotAttackList = {}
 	self._RaycastsPerActivePlayer = 0
 	---@type table<string, boolean>
 	---`[BotName] -> boolean`
@@ -45,6 +47,10 @@ function BotManager:__init()
 	self._LastBotCheckIndex = 1
 	self._LastPlayerCheckIndex = 1
 	self._InitDone = false
+	self._shooterBots = {}
+
+	Events:Subscribe('ServerDamagePlayer', self, self._onServerDamagePlayer)
+	Hooks:Install('Soldier:Damage', 100, self, self._onSoldierDamage)
 end
 
 -- =============================================
@@ -58,6 +64,7 @@ function BotManager:OnLevelDestroy()
 	self:ResetAllBots()
 	self._ActivePlayers = {}
 	self._InitDone = false
+	bp = nil
 end
 
 ---VEXT Shared UpdateManager:Update Event
@@ -73,7 +80,7 @@ function BotManager:OnUpdateManagerUpdate(p_DeltaTime, p_UpdatePass)
 	end
 
 	if #self._BotsToDestroy > 0 then
-		if self._DestroyBotsTimer >= 0.05 then
+		if self._DestroyBotsTimer >= 0.005 then
 			self._DestroyBotsTimer = 0.0
 			self:DestroyBot(table.remove(self._BotsToDestroy))
 		end
@@ -82,8 +89,73 @@ function BotManager:OnUpdateManagerUpdate(p_DeltaTime, p_UpdatePass)
 	end
 end
 
+function BotManager:_onServerDamagePlayer(playerName, shooterName, damage)
+	-- melee attack
+	local player = PlayerManager:GetPlayerByName(playerName)
+	local bot = self:GetBotByName(shooterName)
+	if player == nil or not player.alive or bot == nil or player.soldier == nil or bot.m_Player.soldier == ni then return end
+	if player.teamId == bot.m_Player.teamId then return end
+	if player.soldier.worldTransform.trans:Distance(bot.m_Player.soldier.worldTransform.trans) > 2 then return end
+
+	self._shooterBots[player.name] = shooterName
+	player.soldier.health = player.soldier.health - damage
+end
+
+function BotManager:_onSoldierDamage(hook, soldier, info, giverInfo)
+	-- soldier -> soldier damage only
+	if soldier.player == nil then
+		return
+	end
+
+	local soldierIsBot = Utilities:isBot(soldier.player.name);
+
+	if not soldierIsBot then
+		if giverInfo.giver == nil then
+			local bot = self:GetBotByName(self._shooterBots[soldier.player.name])
+			if bot ~= nil and bot.m_Player.soldier ~= nil then
+				info.damage = Config.DamageFactorKnife * 100
+				info.boneIndex = 0;
+				info.isBulletDamage = true;
+				info.position = Vec3(soldier.worldTransform.trans.x, soldier.worldTransform.trans.y + 1, soldier.worldTransform.trans.z)
+				info.direction = soldier.worldTransform.trans - bot.m_Player.soldier.worldTransform.trans
+				info.origin = bot.m_Player.soldier.worldTransform.trans
+				if (soldier.health - info.damage) <= 0 and killedPlayers[soldier.player.name] ~= true then
+					TicketManager:SetTicketCount(bot.m_Player.teamId, TicketManager:GetTicketCount(bot.m_Player.teamId) + 1)
+					killedPlayers[soldier.player.name] = true
+				end
+			end
+		else
+			--valid bot-damage?
+			local bot = self:GetBotByName(giverInfo.giver.name)
+			if bot ~= nil and bot.m_Player.soldier ~= nil then
+				-- giver was a bot (with explosives)
+				info.damage = self:_GetDamageValue(info.damage, bot, soldier);
+			end
+		end
+	end
+
+	hook:Pass(soldier, info, giverInfo)
+end
+
+Events:Subscribe('Player:ReviveAccepted', function(player, reviver)
+	if killedPlayers[player.name] == true then
+		TicketManager:SetTicketCount(2, TicketManager:GetTicketCount(2) - 1)
+		killedPlayers[player.name] = false
+	end
+end)
+
+Events:Subscribe('Player:Respawn', function(player)
+	killedPlayers[player.name] = false
+end)
+
+Events:Subscribe('Level:Loaded', function(levelName, gameMode, round, roundsPerMap)
+	bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
+end)
+
 ---VEXT Server Player:Left Event
+--  + (Config.IncrementAmmoDropChancePerWave * m_BotSpawner._CurrentSpawnWave)
 function BotManager:OnPlayerKilled(p_Player)
+<<<<<<< Updated upstream
 	if not m_Utilities:isBot(p_Player) then
 		return
 	end
@@ -117,10 +189,17 @@ function BotManager:OnPlayerKilled(p_Player)
 		end
 	end
 
-	if bp == nil then
+=======
+	if not m_Utilities:isBot(p_Player) or not Config.ZombiesDropAmmo or MathUtils:GetRandomInt(1, 100) > Globals.AmmoDropChance then
 		return
 	end
 
+>>>>>>> Stashed changes
+	if bp == nil then
+		bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
+	end
+
+<<<<<<< Updated upstream
 	local creationParams = EntityCreationParams()
 	creationParams.transform = LinearTransform()
 	creationParams.networked = true
@@ -133,6 +212,20 @@ function BotManager:OnPlayerKilled(p_Player)
 
 	for _, entity in pairs(createdBus.entities) do
 		entity:Init(Realm.Realm_ClientAndServer, true)
+=======
+	if bp ~= nil then
+		local creationParams = EntityCreationParams()
+		creationParams.transform = LinearTransform()
+		creationParams.networked = true
+		creationParams.transform.trans = p_Player.soldier.transform.trans:Clone()
+		local createdBus = EntityManager:CreateEntitiesFromBlueprint(bp, creationParams)
+		if createdBus == nil then
+			return
+		end
+		for _, entity in pairs(createdBus.entities) do
+			entity:Init(Realm.Realm_ClientAndServer, true)
+		end
+>>>>>>> Stashed changes
 	end
 end
 
@@ -183,6 +276,7 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 		return
 	end
 
+<<<<<<< Updated upstream
 	if (p_Soldier.player.teamId == Config.BotTeam) then
 		if (p_Info.isBulletDamage and p_Info.boneIndex == 1) then     -- headshot
 			p_Info.damage = p_Info.damage * Config.BotHeadshotDamageMultiplier -- headshot multiplier is 2x by default
@@ -190,6 +284,31 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 
 		if (p_Info.isExplosionDamage or p_Info.isDemolitionDamage) then
 			p_Info.damage = p_Info.damage * Config.BotExplosionDamageMultiplier
+=======
+	if p_Soldier.player.teamId == 2 then
+		if p_Info.isExplosionDamage then
+			p_Info.damage = p_Info.damage * 2.5
+		else
+			if p_Info.boneIndex == 1 then                              -- headshot
+				p_Info.damage = p_Info.damage * Config.BotHeadshotDamageMultiplier -- headshot multiplier is 2x by default
+			else
+				p_Info.damage = p_Info.damage * 0.6
+			end
+		end
+
+		local s_Bot = self:GetBotByName(p_Soldier.player.name)
+		if s_Bot then
+			local newSpeed = MathUtils:Clamp(s_Bot._SpeedValue * (p_Soldier.health / p_Soldier.maxHealth), Registry.ZOMBIES.MIN_MOVE_SPEED * 3, s_Bot._SpeedValue)
+			s_Bot._SpeedFactorAttack = newSpeed
+
+			-- if newSpeed <= Registry.ZOMBIES.MIN_MOVE_SPEED * 2 then
+			-- 	s_Bot._ZombieSpeedValue = BotMoveSpeeds.VerySlowProne
+			-- end
+		end
+	elseif (p_Soldier.player.teamId == 1) then
+		if (p_Info.isExplosionDamage) then
+			p_Info.damage = p_Info.damage * 0.5
+>>>>>>> Stashed changes
 		end
 	end
 
@@ -199,7 +318,7 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 		if p_GiverInfo and p_GiverInfo.giver then
 			-- Detect if we need to shoot back.
 			if Config.ShootBackIfHit then
-				self:OnShootAt(p_GiverInfo.giver, p_Soldier.player.name, true)
+				self:OnShootAt(p_GiverInfo.giver, p_Soldier.player.name, false)
 			end
 
 			-- Prevent bots from killing themselves. Bad bot, no suicide.
@@ -216,7 +335,7 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 			-- This damage was dealt by a bot.
 			if s_Bot and s_Bot.m_Player.soldier then
 				-- Update the bot damage with the multipliers from the config.
-				p_Info.damage = self:_GetDamageValue(p_Info.damage, s_Bot, p_Soldier)
+				p_Info.damage = (Config.DamageFactorKnife * 100) - 1
 			end
 		end
 	end
@@ -235,9 +354,9 @@ end
 function BotManager:OnShootAt(p_Player, p_BotName, p_IgnoreYaw)
 	local s_Bot = self:GetBotByName(p_BotName)
 
-	if not s_Bot then
-		return
-	end
+	--if not s_Bot then
+	--return
+	--end
 
 	s_Bot:ShootAt(p_Player, p_IgnoreYaw)
 end
@@ -329,7 +448,7 @@ function BotManager:OnClientRaycastResults(p_Player, p_RaycastResults)
 		if l_RaycastResult.Mode == "ShootAtBot" then
 			self:OnBotShootAtBot(p_Player, l_RaycastResult.Bot1, l_RaycastResult.Bot2)
 		elseif l_RaycastResult.Mode == "ShootAtPlayer" then
-			self:OnShootAt(p_Player, l_RaycastResult.Bot1, l_RaycastResult.IgnoreYaw)
+			self:OnShootAt(p_Player, l_RaycastResult.Bot1, true)
 		elseif l_RaycastResult.Mode == "RevivePlayer" then
 			self:OnRevivePlayer(p_Player, l_RaycastResult.Bot1)
 		end
@@ -774,6 +893,7 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 	-- Customization of health of bot.
 	local s_RandomValueOfBot = MathUtils:GetRandom(0.0, 1.0)
 	p_Bot._RandomValueOfBot = s_RandomValueOfBot
+<<<<<<< Updated upstream
 
 	if Config.UseZombieClasses then
 		-- only assault-bots use the max health
@@ -789,6 +909,12 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		else
 			s_BotSoldier.maxHealth = maxHealthValue
 		end
+=======
+	if Config.RandomHealthOfZombies then
+		s_BotSoldier.maxHealth = minHealthValue + (s_RandomValueOfBot * (maxHealthValue - minHealthValue))
+	else
+		s_BotSoldier.maxHealth = maxHealthValue
+>>>>>>> Stashed changes
 	end
 
 	s_BotSoldier.health = s_BotSoldier.maxHealth -- this does not work. TODO: find out how to fill the health up
@@ -799,6 +925,11 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 
 	-- Set Bot-Vars
 	p_Bot._GoForDirectAttackIfClose = (MathUtils:GetRandomInt(1, 100) <= Registry.ZOMBIES.PROBABILITY_GO_FOR_DIRECT_ATTACK)
+<<<<<<< Updated upstream
+=======
+
+	p_Bot._FollowTargetPose = MathUtils:GetRandom(0, 100) < 20
+>>>>>>> Stashed changes
 
 	-- Walk-Speed
 	local s_MinSpeedWalk = Registry.ZOMBIES.MIN_MOVE_SPEED
@@ -845,6 +976,7 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		s_MinJumpValue = Globals.MinJumpSpeedValue
 	end
 
+<<<<<<< Updated upstream
 	if Config.UseZombieClasses then
 		-- Engineers can jump high
 		if p_Bot.m_Kit == BotKits.Engineer then
@@ -862,12 +994,22 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 	end
 
 	local s_SpeedValue = 0.0
+=======
+	if Config.RandomJumpSpeedOfZombies then
+		p_Bot._HighJumpSpeed = s_MinJumpValue + (s_RandomValueOfBot * (s_MaxJumpValue - s_MinJumpValue))
+	else
+		p_Bot._HighJumpSpeed = s_MaxJumpValue
+	end
+
+	local SpeedValue = 0.0
+>>>>>>> Stashed changes
 	local s_MaxSpeedValue = Config.SpeedFactorAttack
 	local s_MinSpeedValue = Config.MinSpeedFactorAttack
 	if Globals.SpawnMode == SpawnModes.wave_spawn then
 		s_MaxSpeedValue = Globals.MaxSpeedAttackValue
 		s_MinSpeedValue = Globals.MinSpeedAttackValue
 	end
+<<<<<<< Updated upstream
 
 	if Config.UseZombieClasses then
 		-- Recons can sprint faster
@@ -888,13 +1030,26 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 
 	if s_SpeedValue < 1.0 then
 		s_SpeedValue = 1.0 -- default sprint behaviour, don't sptint later
+=======
+	if Config.RandomAttackSpeedOfZombies then
+		SpeedValue = s_MinSpeedValue + (s_RandomValueOfBot * (s_MaxSpeedValue - s_MinSpeedValue))
+	else
+		SpeedValue = s_MaxSpeedValue
+	end
+
+	p_Bot._SpeedFactorAttack = SpeedValue
+	p_Bot._SpeedValue = SpeedValue
+
+	if SpeedValue < 1.0 then
+		SpeedValue = 1.0 -- default sprint behaviour, don't sptint later
+>>>>>>> Stashed changes
 	end
 
 	local s_EntityIterator = EntityManager:GetIterator('PropertyCastEntity')
 	local s_Entity = s_EntityIterator:Next()
 	while s_Entity do
 		if s_Entity.data and s_Entity.data.instanceGuid == Guid("51A231A1-CCBA-3DEF-1E3B-A28F5AE67188") and s_Entity.bus == s_BotPlayer.soldier.bus then
-			s_Entity:PropertyChanged("FloatValue", s_SpeedValue)
+			s_Entity:PropertyChanged("FloatValue", SpeedValue)
 			return
 		end
 		s_Entity = s_EntityIterator:Next()
@@ -1198,183 +1353,11 @@ end
 ---@param p_Player Player
 ---@param p_Objective any To-do: add emmylua type
 function BotManager:Attack(p_Player, p_Objective)
-	if not Globals.IsConquest or not p_Player or not p_Player.soldier then
-		return
-	end
-
-	local s_MaxObjectiveBots = 4
-	local s_SoldierPosition = p_Player.soldier.worldTransform.trans
-
-	for _, l_Bot in ipairs(self._BotsByTeam[p_Player.teamId + 1]) do
-		local s_BotSoldier = l_Bot.m_Player.soldier
-
-		if s_BotSoldier then
-			local s_Distance = s_BotSoldier.worldTransform.trans:Distance(s_SoldierPosition)
-
-			if s_Distance < Registry.COMMON.COMMAND_DISTANCE then
-				l_Bot:UpdateObjective(p_Objective)
-				s_MaxObjectiveBots = s_MaxObjectiveBots - 1
-
-				if s_MaxObjectiveBots == 0 then
-					break
-				end
-			end
-		end
-	end
 end
 
 -- =============================================
 -- Private Functions
 -- =============================================
-
----@param p_RaycastData any To-do: add emmylua type
-function BotManager:_DistributeRaycastsBotBotAttack(p_RaycastData)
-	local s_RaycastIndex = 0
-	local s_RaycastDataCount = #p_RaycastData
-	local s_ActivePlayerCount = #self._ActivePlayers
-
-	for i = 0, (s_ActivePlayerCount - 1) do
-		local s_Index = ((self._LastPlayerCheckIndex + i) % s_ActivePlayerCount) + 1
-		local s_ActivePlayer = PlayerManager:GetPlayerByName(self._ActivePlayers[s_Index])
-
-		if s_ActivePlayer ~= nil then
-			local s_RaycastsToSend = {}
-
-			for l_Count = 1, self._RaycastsPerActivePlayer do
-				if s_RaycastIndex < s_RaycastDataCount then
-					s_RaycastIndex = s_RaycastIndex + 1
-					table.insert(s_RaycastsToSend, p_RaycastData[s_RaycastIndex])
-				else
-					NetEvents:SendUnreliableToLocal('CheckBotBotAttack', s_ActivePlayer, s_RaycastsToSend)
-					self._LastPlayerCheckIndex = s_Index
-					return
-				end
-			end
-
-			NetEvents:SendUnreliableToLocal('CheckBotBotAttack', s_ActivePlayer, s_RaycastsToSend)
-		end
-	end
-end
-
-function BotManager:_CheckForBotBotAttack()
-	-- Not enough on either team and no players to use.
-	if #self._ActivePlayers == 0 then
-		return
-	end
-
-	-- Create tables and scramble them.
-	if #self._BotBotAttackList == 0 then
-		-- Filter out bots not in StationaryAA.
-		for _, l_Bot in ipairs(self._Bots) do
-			if l_Bot.m_InVehicle then
-				if l_Bot.m_ActiveVehicle and l_Bot.m_ActiveVehicle.Type ~= VehicleTypes.StationaryAA then
-					table.insert(self._BotBotAttackList, l_Bot.m_Name)
-				end
-			else
-				table.insert(self._BotBotAttackList, l_Bot.m_Name)
-			end
-		end
-
-		-- Randomize the botlist order.
-		for i = #self._BotBotAttackList, 2, -1 do
-			local j = math.random(i)
-			self._BotBotAttackList[i], self._BotBotAttackList[j] = self._BotBotAttackList[j], self._BotBotAttackList[i]
-		end
-	end
-
-	local s_Raycasts = 0
-	local s_ChecksDone = 0
-
-	local s_RaycastEntries = {}
-
-	for i = self._LastBotCheckIndex, #self._BotBotAttackList do
-		-- Body.
-		local s_BotNameToCheck = self._BotBotAttackList[i]
-		local s_Bot = self:GetBotByName(s_BotNameToCheck)
-
-		if s_Bot and s_Bot.m_Player and s_Bot.m_Player.soldier and s_Bot:IsReadyToAttack() then
-			local s_BotPosition = nil
-			if s_Bot.m_Player.controlledControllable then
-				s_BotPosition = s_Bot.m_Player.controlledControllable.transform.trans
-			else
-				s_BotPosition = s_Bot.m_Player.soldier.worldTransform.trans
-			end
-
-			for _, l_BotName in ipairs(self._BotBotAttackList) do
-				if l_BotName ~= s_BotNameToCheck then
-					local s_EnemyBot = self:GetBotByName(l_BotName)
-
-					if s_EnemyBot and s_EnemyBot.m_Player and s_EnemyBot.m_Player.soldier and
-						s_EnemyBot.m_Player.teamId ~= s_Bot.m_Player.teamId and s_EnemyBot:IsReadyToAttack() then
-						-- Check connection-state.
-						local s_ConnectionValue = ""
-						local s_Id1 = s_Bot.m_Player.id
-						local s_Id2 = s_EnemyBot.m_Player.id
-
-						if s_Id1 > s_Id2 then
-							s_ConnectionValue = tostring(s_Id2) .. "-" .. tostring(s_Id1)
-						else
-							s_ConnectionValue = tostring(s_Id1) .. "-" .. tostring(s_Id2)
-						end
-
-						if not self._ConnectionCheckState[s_ConnectionValue] then
-							self._ConnectionCheckState[s_ConnectionValue] = true
-							-- Check distance.
-							local s_EnemyBotPosition = nil
-							if s_Bot.m_Player.controlledControllable then
-								s_EnemyBotPosition = s_EnemyBot.m_Player.controlledControllable.transform.trans
-							else
-								s_EnemyBotPosition = s_EnemyBot.m_Player.soldier.worldTransform.trans
-							end
-							local s_Distance = s_BotPosition:Distance(s_EnemyBotPosition)
-							s_ChecksDone = s_ChecksDone + 1
-							local s_MaxDistance = s_Bot:GetAttackDistance()
-							local s_MaxDistanceEnemyBot = s_EnemyBot:GetAttackDistance()
-
-							if s_MaxDistanceEnemyBot > s_MaxDistance then
-								s_MaxDistance = s_MaxDistanceEnemyBot
-							end
-
-							if s_Distance <= s_MaxDistance then
-								table.insert(s_RaycastEntries, {
-									Bot1 = s_BotNameToCheck,
-									Bot2 = l_BotName,
-									Bot1InVehicle = s_Bot.m_InVehicle,
-									Bot2InVehicle = s_EnemyBot.m_InVehicle,
-									Distance = s_Distance
-								})
-								s_Raycasts = s_Raycasts + 1
-
-								if s_Raycasts >= (#self._ActivePlayers * self._RaycastsPerActivePlayer) then
-									self._LastBotCheckIndex = i
-									self:_DistributeRaycastsBotBotAttack(s_RaycastEntries)
-									return
-								end
-							end
-
-							if s_ChecksDone >= Registry.GAME_RAYCASTING.BOT_BOT_MAX_CHECKS then
-								self._LastBotCheckIndex = i
-								self:_DistributeRaycastsBotBotAttack(s_RaycastEntries)
-								return
-							end
-						end
-					end
-				end
-			end
-		end
-
-		self._LastBotCheckIndex = i
-	end
-
-	self:_DistributeRaycastsBotBotAttack(s_RaycastEntries)
-
-	-- Should only reach here if every connection has been checked.
-	-- Clear the cache and start over.
-	self._LastBotCheckIndex = 1
-	self._BotCheckState = {}
-	self._ConnectionCheckState = {}
-	self._BotBotAttackList = {}
-end
 
 ---@param p_Damage integer
 ---@param p_Bot Bot

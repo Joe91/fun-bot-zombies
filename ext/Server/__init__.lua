@@ -115,33 +115,27 @@ function FunBotServer:RegisterEvents()
 	Events:Subscribe('Player:Left', self, self.OnPlayerLeft)
 	Events:Subscribe('Player:Destroyed', self, self.OnPlayerDestroyed)
 
-	Events:Subscribe('CapturePoint:Lost', self, self.OnCapturePointLost)
-	Events:Subscribe('CapturePoint:Captured', self, self.OnCapturePointCaptured)
-	Events:Subscribe('Player:EnteredCapturePoint', self, self.OnPlayerEnteredCapturePoint)
-	Events:Subscribe('Vehicle:SpawnDone', self, self.OnVehicleSpawnDone)
-	Events:Subscribe('Vehicle:Enter', self, self.OnVehicleEnter)
-	Events:Subscribe('Vehicle:Exit', self, self.OnVehicleExit)
-	Events:Subscribe('ScoringSystem:StatEvent', self, self.OnScoringStatEvent)
+	--Events:Subscribe('CapturePoint:Lost', self, self.OnCapturePointLost)
+	--Events:Subscribe('CapturePoint:Captured', self, self.OnCapturePointCaptured)
+	--Events:Subscribe('Player:EnteredCapturePoint', self, self.OnPlayerEnteredCapturePoint)
+	--Events:Subscribe('ScoringSystem:StatEvent', self, self.OnScoringStatEvent)
 
-	Events:Subscribe('CombatArea:PlayerDeserting', self, self.OnCombatAreaDeserting)
-	Events:Subscribe('CombatArea:PlayerReturning', self, self.OnCombatAreaReturning)
+	--Events:Subscribe('CombatArea:PlayerDeserting', self, self.OnCombatAreaDeserting)
+	--Events:Subscribe('CombatArea:PlayerReturning', self, self.OnCombatAreaReturning)
 	Events:Subscribe('LifeCounter:BaseDestroyed', self, self.OnLifeCounterBaseDestoyed)
-
 end
 
 function FunBotServer:RegisterHooks()
 	Hooks:Install('Soldier:Damage', 100, self, self.OnSoldierDamage)
 	Hooks:Install('EntityFactory:Create', 100, self, self.OnEntityFactoryCreate)
+	Hooks:Install('BulletEntity:Collision', 1, self, self.OnBulletEntityCollision)
 end
 
 function FunBotServer:RegisterCustomEvents()
 	NetEvents:Subscribe("Botmanager:RaycastResults", self, self.OnClientRaycastResults)
 	Events:Subscribe('Bot:RespawnBot', self, self.OnRespawnBot)
 	Events:Subscribe('Bot:AbortWait', self, self.OnBotAbortWait)
-	Events:Subscribe('Bot:ExitVehicle', self, self.OnBotExitVehicle)
 	NetEvents:Subscribe('Client:RequestSettings', self, self.OnRequestClientSettings)
-	NetEvents:Subscribe('Client:RequestEnterVehicle', self, self.OnRequestEnterVehicle)
-	NetEvents:Subscribe('Client:RequestChangeVehicleSeat', self, self.OnRequestChangeSeatVehicle)
 	NetEvents:Subscribe('ConsoleCommands:SetConfig', self, self.OnConsoleCommandSetConfig)
 	NetEvents:Subscribe('ConsoleCommands:SaveAll', self, self.OnConsoleCommandSaveAll)
 	NetEvents:Subscribe('ConsoleCommands:Restore', self, self.OnConsoleCommandRestore)
@@ -237,11 +231,25 @@ function FunBotServer:RegisterCallbacks()
 		s_AmmoConfig.supplyPointsCapacity = 1.0
 		s_AmmoConfig.supplyPointsRefillSpeed = 1.0
 	end)
+
+	ResourceManager:RegisterInstanceLoadHandler(Guid("04CD683B-1F1B-11E0-BBD1-F7235575FD24"), Guid("4AE515CE-846D-6070-5F56-1285B7E8E187"), function(instance)
+		instance = SupplySphereEntityData(instance)
+		instance:MakeWritable()
+		instance.receivesExplosionDamage = false
+	end)
 end
 
 -- =============================================
 -- Events.
 -- =============================================
+
+function FunBotServer:OnBulletEntityCollision(p_HookCtx, p_Entity, p_Hit, p_GiverInfo)
+	local s_SyncedGameSettings = ResourceManager:GetSettings("SyncedGameSettings")
+	if not s_SyncedGameSettings then return end
+	s_SyncedGameSettings = SyncedGameSettings(s_SyncedGameSettings)
+	s_SyncedGameSettings:MakeWritable()
+	s_SyncedGameSettings.allowClientSideDamageArbitration = true
+end
 
 ---VEXT Shared Extension:Unloading Event
 function FunBotServer:OnExtensionUnloading()
@@ -581,7 +589,7 @@ end
 function FunBotServer:OnSyncedGameSettingsCallback(p_SyncedGameSettings)
 	p_SyncedGameSettings = SyncedGameSettings(p_SyncedGameSettings)
 	p_SyncedGameSettings:MakeWritable()
-	p_SyncedGameSettings.allowClientSideDamageArbitration = false
+	p_SyncedGameSettings.allowClientSideDamageArbitration = true
 end
 
 ---@param p_FiringFunctionData FiringFunctionData|DataContainer
