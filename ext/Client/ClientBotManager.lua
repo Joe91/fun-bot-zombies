@@ -231,16 +231,9 @@ function ClientBotManager:OnUpdateManagerUpdate(p_DeltaTime, p_UpdatePass)
 
 			local s_Distance = s_PlayerPosition:Distance(s_TargetPos)
 			local s_VertDistance = Vec3(0, s_PlayerPosition.y, 0):Distance(Vec3(0, s_TargetPos.y, 0))
-<<<<<<< Updated upstream
-
-			s_CheckCount = s_CheckCount + 1
-
-			if (s_Distance < Config.MaxShootDistance) and (s_PlayerPosition.y < s_TargetPos.y or s_VertDistance < (1 - (s_Distance / Config.MaxShootDistance)) * Config.MaxShootHeight) then
-=======
 			s_CheckCount = s_CheckCount + 1
 
 			if (s_Distance < Config.MaxShootDistance) and (s_PlayerPosition.y < s_TargetPos.y or s_VertDistance < (1 - (s_Distance / Config.MaxShootDistance)) * 12) then
->>>>>>> Stashed changes
 				if self:DoRaycast(s_PlayerPosition, s_TargetPos, self.m_Player.inVehicle, s_Bot.inVehicle) then
 					-- We found a valid bot in Sight (either no hit, or player-hit). Signal Server with players.
 					local s_IgnoreYaw = false

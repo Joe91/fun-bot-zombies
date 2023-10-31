@@ -161,20 +161,6 @@ function BotMovement:UpdateNormalMovement(p_Bot)
 						p_Bot.m_Player.soldier:SetTransform(s_Transform)
 						m_Logger:Write('teleported ' .. p_Bot.m_Player.name)
 					else
-<<<<<<< Updated upstream
-						if not p_Bot.m_InVehicle then
-							s_PointIncrement = MathUtils:GetRandomInt(-5, 5) -- Go 5 points further.
-							-- Experimental.
-							if s_PointIncrement == 0 then -- We can't have this.
-								s_PointIncrement = -2   -- Go backwards and try again.
-							end
-
-							if (Globals.IsConquest or Globals.IsRush) then
-								if g_GameDirector:IsOnObjectivePath(p_Bot._PathIndex) then
-									p_Bot._InvertPathDirection = (
-										MathUtils:GetRandomInt(0, 100) <= Registry.BOT.PROBABILITY_CHANGE_DIRECTION_IF_STUCK)
-								end
-=======
 						s_PointIncrement = MathUtils:GetRandomInt(-5, 5) -- Go 5 points further.
 						-- Experimental.
 						if s_PointIncrement == 0 then  -- We can't have this.
@@ -184,7 +170,6 @@ function BotMovement:UpdateNormalMovement(p_Bot)
 							if g_GameDirector:IsOnObjectivePath(p_Bot._PathIndex) then
 								p_Bot._InvertPathDirection = (
 									MathUtils:GetRandomInt(0, 100) <= Registry.BOT.PROBABILITY_CHANGE_DIRECTION_IF_STUCK)
->>>>>>> Stashed changes
 							end
 						end
 					end
@@ -348,22 +333,6 @@ function BotMovement:UpdateShootMovement(p_Bot)
 			p_Bot._ObstacleSequenceTimer = 1
 			p_Bot._FollowTargetPose = MathUtils:GetRandom(0, 100) < 40
 			table.remove(p_Bot._ShootWayPoints)
-<<<<<<< Updated upstream
-			p_Bot:_SetInput(EntryInputActionEnum.EIAJump, 1)
-			p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeJumpClimb, 1)
-			if Config.UseZombieClasses then
-				-- only engineers jump high (but always)
-				if p_Bot.m_Kit == BotKits.Engineer then
-					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
-					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
-				end
-			else
-				-- every bot randomly jumps high
-				if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
-					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
-					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
-				end
-=======
 			if p_Bot._ZombieSpeedValue ~= BotMoveSpeeds.VerySlowProne then
 				p_Bot:_SetInput(EntryInputActionEnum.EIAJump, 1)
 				p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeJumpClimb, 1)
@@ -372,7 +341,6 @@ function BotMovement:UpdateShootMovement(p_Bot)
 			if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
 				local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
 				s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
->>>>>>> Stashed changes
 			end
 		else
 			p_Bot._ObstacleSequenceTimer = 0

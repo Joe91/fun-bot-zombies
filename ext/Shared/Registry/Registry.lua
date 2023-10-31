@@ -35,11 +35,7 @@ Registry = {
 		-- Patch version.
 		VERSION_PATCH = 0,
 		-- Additional label for pre-releases and build metadata.
-<<<<<<< Updated upstream
-		VERSION_LABEL = "dev3",
-=======
 		VERSION_LABEL = "dev2",
->>>>>>> Stashed changes
 		-- Current version type of this build.
 		VERSION_TYPE = VersionType.DevBuild,
 		-- The Version used for the Update-Check.
@@ -47,6 +43,7 @@ Registry = {
 		-- Prints current version in console.
 		CLIENT_SHOW_VERSION_ON_JOIN = false,
 	},
+
 	-- Some Client Variables.
 	CLIENT = {
 		-- Distance a bot tries to revive a player.
@@ -56,6 +53,7 @@ Registry = {
 		-- Time bots will not attack a player when spawned.
 		SPAWN_PROTECTION = 0.0,
 	},
+
 	-- Variables related to raycasting.
 	GAME_RAYCASTING = {
 		MAX_RAYCASTS_PER_PLAYER_PER_CYCLE = 3,
@@ -70,6 +68,7 @@ Registry = {
 		-- Max checks per cycle.
 		BOT_BOT_MAX_CHECKS = 25
 	},
+
 	GAME_DIRECTOR = {
 		UPDATE_OBJECTIVES_CYCLE = 1.5,
 		-- Time after a MCO is considered destroyed.
@@ -81,6 +80,7 @@ Registry = {
 		-- Increments of nodes to search best patch with.
 		NODE_SEARCH_INCREMENTS = 10,
 	},
+
 	VEHICLES = {
 		-- Distance for the "enter vehicle" command.
 		MIN_DISTANCE_VEHICLE_ENTER = 10.0,
@@ -113,15 +113,10 @@ Registry = {
 		-- Seat-check cycle-time.
 		VEHICLE_SEAT_CHECK_CYCLE_TIME = 4.0,
 	},
+
 	ZOMBIES = {
-<<<<<<< Updated upstream
-		PROBABILITY_DROP_AMMO = 25,
-		PROBABILITY_DROP_NADE = 35,
-		PROBABILITY_GO_FOR_DIRECT_ATTACK = 50,
-=======
 		PROBABILITY_DROP_AMMO = 10,
 		PROBABILITY_GO_FOR_DIRECT_ATTACK = 65,
->>>>>>> Stashed changes
 		WEIGHT_PRONE = 2,
 		WEIGHT_CROUCH = 2,
 		WEIGHT_WALK = 2,
@@ -129,6 +124,7 @@ Registry = {
 		MIN_MOVE_SPEED = 0.2,
 		MAX_MOVE_SPEED = 1.0,
 	},
+
 	-- Bot related.
 	BOT = {
 		-- Update cycle fast.
@@ -138,11 +134,7 @@ Registry = {
 		-- - distance the bots have to reach in height to continue with next Waypoint.
 		TARGET_HEIGHT_DISTANCE_WAYPOINT = 1.5,
 		-- Chance that the bot will teleport when they are stuck.
-<<<<<<< Updated upstream
-		PROBABILITY_TELEPORT_IF_STUCK = 70,
-=======
 		PROBABILITY_TELEPORT_IF_STUCK = 50,
->>>>>>> Stashed changes
 		-- Chance that the bot will teleport when they are stuck in a vehicle.
 		PROBABILITY_TELEPORT_IF_STUCK_IN_VEHICLE = 20,
 		-- At the end of an attack cycle, chance of throwing a grenade.
@@ -160,6 +152,7 @@ Registry = {
 		-- Advanced aiming makes a difference on huge distances, but costs more performance.
 		USE_ADVANCED_AIMING = false,
 	},
+
 	-- Bot team balancing (only in keep_playercount - spawn-mode)
 	BOT_TEAM_BALANCING = {
 		-- Minimum amount of players required before balancing bots across teams.
@@ -169,6 +162,7 @@ Registry = {
 		-- Note: Only for mode keep_playercount.
 		ALLOWED_DIFFERENCE = 1,
 	},
+
 	-- Bot spawning.
 	BOT_SPAWN = {
 		-- Time between a level loading and the first bot spawning.

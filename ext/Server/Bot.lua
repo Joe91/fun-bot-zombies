@@ -85,10 +85,7 @@ function Bot:__init(p_Player)
 	-- Zombie Stuff
 	self._SpeedFactorMovement = 1.0
 	self._SpeedFactorAttack = 1.0
-<<<<<<< Updated upstream
-=======
 	self._SpeedValue = 0.0
->>>>>>> Stashed changes
 	self._HighJumpSpeed = 1.0
 	self._RandomValueOfBot = 1.0
 	self._GoForDirectAttackIfClose = true
@@ -494,7 +491,6 @@ function Bot:ResetSpawnVars()
 	self._ShootTraceTimer = 0.0
 	self._ReloadTimer = 0.0
 	self._BrakeTimer = 0.0
-	self._AttackTimer = 0.0
 	self._AttackModeMoveTimer = 0.0
 	self._AttackMode = BotAttackModes.RandomNotSet
 	self._ShootWayPoints = {}

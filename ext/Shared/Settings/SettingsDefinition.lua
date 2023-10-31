@@ -61,28 +61,6 @@ SettingsDefinition = {
 			Category = "GENERAL"
 		},
 		{
-			Name = "ZombiesDropNades",
-			Text = "Zombies Drop Nades",
-			---@type Type|integer
-			Type = Type.Boolean,
-			Value = Config.ZombiesDropNades,
-			Description = "Zombies drop randomly nades",
-			Default = true,
-			UpdateFlag = UpdateFlag.None,
-			Category = "GENERAL"
-		},
-		{
-			Name = "UseZombieClasses",
-			Text = "Use Zombie Classes",
-			---@type Type|integer
-			Type = Type.Boolean,
-			Value = Config.UseZombieClasses,
-			Description = "Zombie classes behave different",
-			Default = false,
-			UpdateFlag = UpdateFlag.None,
-			Category = "GENERAL"
-		},
-		{
 			Name = "RandomHealthOfZombies",
 			Text = "Randomize Helth of Zombies",
 			---@type Type|integer
@@ -209,18 +187,6 @@ SettingsDefinition = {
 			Category = "DIFFICULTY"
 		},
 		{
-			Name = "BotExplosionDamageMultiplier",
-			Text = "Bot Explosion DamageMultiplier",
-			---@type Type|integer
-			Type = Type.Float,
-			Value = Config.BotExplosionDamageMultiplier,
-			Description = "Damage multiplier for explosions ",
-			Reference = Range(0.0, 100.00, 0.1),
-			Default = 2.25,
-			UpdateFlag = UpdateFlag.None,
-			Category = "DIFFICULTY"
-		},
-		{
 			Name = "BotWorseningSkill",
 			Text = "Bot Worsening Skill",
 			---@type Type|integer
@@ -264,31 +230,7 @@ SettingsDefinition = {
 			Value = Config.MinSpeedFactorAttack,
 			Description = "Modifies the minimal speed while attacking. 1 = normal",
 			Reference = Range(0.00, 3.00, 0.10),
-			Default = 0.7,
-			UpdateFlag = UpdateFlag.Wave,
-			Category = "DIFFICULTY"
-		},
-		{
-			Name = "MinHighJumpSpeed",
-			Text = "Min High Jump Speed",
-			---@type Type|integer
-			Type = Type.Float,
-			Value = Config.MinHighJumpSpeed,
-			Description = "Min Speed the bots jump with on high-jumps",
-			Reference = Range(0.00, 100.00, 1.0),
-			Default = 5.0,
-			UpdateFlag = UpdateFlag.Wave,
-			Category = "DIFFICULTY"
-		},
-		{
-			Name = "MaxHighJumpSpeed",
-			Text = "Max High Jump Speed",
-			---@type Type|integer
-			Type = Type.Float,
-			Value = Config.MaxHighJumpSpeed,
-			Description = "Max Speed the bots jump with on high-jumps",
-			Reference = Range(0.00, 100.00, 1.0),
-			Default = 12.0,
+			Default = 0.5,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -494,7 +436,7 @@ SettingsDefinition = {
 			Value = Config.FirstWaveCount,
 			Description = "Zombies that spawn in the first wave",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 48,
+			Default = 30,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -506,7 +448,7 @@ SettingsDefinition = {
 			Value = Config.IncrementZombiesPerWave,
 			Description = "Zombies that are added in each new wave",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 24,
+			Default = 10,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -633,25 +575,13 @@ SettingsDefinition = {
 		},
 		{
 			Name = "MaxShootDistance",
-			Text = "Max Shoot-Distance",
+			Text = "Max Shoot-Distance No Sniper",
 			---@type Type|integer
 			Type = Type.Integer,
 			Value = Config.MaxShootDistance,
-			Description = "Meters before bots will start shooting at players",
+			Description = "Meters before bots (not sniper) will start shooting at players",
 			Reference = Range(1.00, 1500.00, 5.0),
 			Default = 125,
-			UpdateFlag = UpdateFlag.None,
-			Category = "BEHAVIOUR"
-		},
-		{
-			Name = "MaxShootHeight",
-			Text = "Max Shoot-Height",
-			---@type Type|integer
-			Type = Type.Integer,
-			Value = Config.MaxShootHeight,
-			Description = "Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance",
-			Reference = Range(1.00, 1500.00, 5.0),
-			Default = 12,
 			UpdateFlag = UpdateFlag.None,
 			Category = "BEHAVIOUR"
 		},

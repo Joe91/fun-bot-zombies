@@ -32,10 +32,7 @@ Globals = {
 	MinJumpSpeedValue = 0,
 	DamageFactorZombies = 0,
 	DistanceToSpawnBots = 0,
-<<<<<<< Updated upstream
-=======
 	AmmoDropChance = 0,
->>>>>>> Stashed changes
 
 	RespawnWayBots = false,    -- Used for the runtime respawn.
 	AttackWayBots = false,     -- Used for the runtime attack.
