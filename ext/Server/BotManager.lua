@@ -324,9 +324,9 @@ end
 function BotManager:OnShootAt(p_Player, p_BotName, p_IgnoreYaw)
 	local s_Bot = self:GetBotByName(p_BotName)
 
-	--if not s_Bot then
-	--return
-	--end
+	if not s_Bot then
+		return
+	end
 
 	s_Bot:ShootAt(p_Player, p_IgnoreYaw)
 end

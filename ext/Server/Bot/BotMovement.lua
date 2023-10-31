@@ -319,7 +319,7 @@ end
 function BotMovement:UpdateShootMovement(p_Bot)
 	local s_TargetCycles = 1
 
-	if (p_Bot._ShootPlayer and p_Bot._ShootPlayer.soldier) and (p_Bot.m_Player and p_Bot.m_Player.soldier) and p_Bot.m_Player.soldier.worldTransform.trans:Distance(p_Bot._ShootPlayer.soldier.worldTransform.trans) <= 1 then
+	if (p_Bot._ShootPlayer and p_Bot._ShootPlayer.soldier) and (p_Bot.m_Player and p_Bot.m_Player.soldier) and p_Bot._DistanceToPlayer <= 1 then
 		p_Bot.m_ActiveSpeedValue = BotMoveSpeeds.NoMovement
 	else
 		p_Bot.m_ActiveSpeedValue = BotMoveSpeeds.Sprint -- Run towards player.

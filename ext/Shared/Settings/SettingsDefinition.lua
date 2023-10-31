@@ -45,7 +45,7 @@ SettingsDefinition = {
 			Reference = BotColors,
 			Value = Config.BotColor,
 			Description = "The Color of the Bots",
-			Default = BotColors.RANDOM_COLOR,
+			Default = BotColors.Ninja,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -78,7 +78,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.UseZombieClasses,
 			Description = "Zombie classes behave different",
-			Default = false,
+			Default = true,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -89,7 +89,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.RandomHealthOfZombies,
 			Description = "zombie-helth differs from bot to bot",
-			Default = true,
+			Default = false,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -100,7 +100,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.RandomAttackSpeedOfZombies,
 			Description = "zombie-speed differs from bot to bot",
-			Default = true,
+			Default = false,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -111,7 +111,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.RandomDamgeOfZombies,
 			Description = "zombie-damage differs from bot to bot",
-			Default = true,
+			Default = false,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -122,7 +122,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.RandomJumpSpeedOfZombies,
 			Description = "zombie-high-jumps differs from bot to bot",
-			Default = true,
+			Default = false,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -133,7 +133,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.ZombiesProne,
 			Description = "Zombies can prone when walking around",
-			Default = true,
+			Default = false,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -144,7 +144,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.ZombiesCrouch,
 			Description = "Zombies can crouch when walking around",
-			Default = true,
+			Default = false,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -155,7 +155,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.ZombiesWalk,
 			Description = "Zombies can walk when walking around",
-			Default = true,
+			Default = false,
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
@@ -180,7 +180,7 @@ SettingsDefinition = {
 			Value = Config.BotMaxHealth,
 			Description = "Max health of bot at spawn(default 100.0)",
 			Reference = Range(0.0, 1000.00, 1.0),
-			Default = 125.0,
+			Default = 130.0,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -192,7 +192,7 @@ SettingsDefinition = {
 			Value = Config.BotMinHealth,
 			Description = "Min health of bot at spawn (default 100.0)",
 			Reference = Range(0.0, 1000.00, 1.0),
-			Default = 75.0,
+			Default = 100.0,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -240,7 +240,7 @@ SettingsDefinition = {
 			Value = Config.DamageFactorKnife,
 			Description = "Original Damage from bots gets multiplied by this",
 			Reference = Range(0.00, 5.00, 0.10),
-			Default = 1.5,
+			Default = 0.2,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -252,7 +252,7 @@ SettingsDefinition = {
 			Value = Config.SpeedFactorAttack,
 			Description = "Modifies the speed while attacking. 1 = normal",
 			Reference = Range(0.00, 3.00, 0.10),
-			Default = 1.2,
+			Default = 0.775,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -264,7 +264,7 @@ SettingsDefinition = {
 			Value = Config.MinSpeedFactorAttack,
 			Description = "Modifies the minimal speed while attacking. 1 = normal",
 			Reference = Range(0.00, 3.00, 0.10),
-			Default = 0.7,
+			Default = 0.975,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -276,7 +276,7 @@ SettingsDefinition = {
 			Value = Config.MinHighJumpSpeed,
 			Description = "Min Speed the bots jump with on high-jumps",
 			Reference = Range(0.00, 100.00, 1.0),
-			Default = 5.0,
+			Default = 5.5,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -288,7 +288,7 @@ SettingsDefinition = {
 			Value = Config.MaxHighJumpSpeed,
 			Description = "Max Speed the bots jump with on high-jumps",
 			Reference = Range(0.00, 100.00, 1.0),
-			Default = 12.0,
+			Default = 10.0,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -326,7 +326,7 @@ SettingsDefinition = {
 			Value = Config.NewBotsPerNewPlayer,
 			Description = "Number to increase Bots by when new players join",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 5,
+			Default = 0,
 			UpdateFlag = UpdateFlag.AmountAndTeam,
 			Category = "SPAWN"
 		},
@@ -338,7 +338,7 @@ SettingsDefinition = {
 			Value = Config.FactorPlayerTeamCount,
 			Description = "Reduce player team in balanced_teams or fixed_number mode",
 			Reference = Range(0.00, 1.00, 0.05),
-			Default = 0.2,
+			Default = 0.0,
 			UpdateFlag = UpdateFlag.AmountAndTeam,
 			Category = "SPAWN"
 		},
@@ -421,7 +421,7 @@ SettingsDefinition = {
 			Value = Config.AdditionalBotSpawnDelay,
 			Description = "Additional time a bot waits to respawn",
 			Reference = Range(0.0, 60.00, 0.5),
-			Default = 0.1,
+			Default = 0.0,
 			UpdateFlag = UpdateFlag.None,
 			Category = "SPAWN"
 		},
@@ -458,7 +458,7 @@ SettingsDefinition = {
 			Value = Config.PlayerLives,
 			Description = "Amount of times players can die before losing",
 			Reference = Range(1.00, 1000.0, 1.0),
-			Default = 20,
+			Default = 25,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -470,7 +470,7 @@ SettingsDefinition = {
 			Value = Config.FirstWaveCount,
 			Description = "Zombies that spawn in the first wave",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 48,
+			Default = 24,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -482,7 +482,7 @@ SettingsDefinition = {
 			Value = Config.IncrementZombiesPerWave,
 			Description = "Zombies that are added in each new wave",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 24,
+			Default = 12,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -494,7 +494,7 @@ SettingsDefinition = {
 			Value = Config.IncrementMaxHealthPerWave,
 			Description = "Zombies get more health each wave",
 			Reference = Range(0.00, 500.00, 1.0),
-			Default = 25,
+			Default = 2,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -506,7 +506,7 @@ SettingsDefinition = {
 			Value = Config.IncrementDamageFactorPerWave,
 			Description = "Zombies deal more damage each wave",
 			Reference = Range(0.00, 2.00, 0.05),
-			Default = 0.1,
+			Default = 0.0,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -518,7 +518,7 @@ SettingsDefinition = {
 			Value = Config.IncrementMaxSpeedPerWave,
 			Description = "Zombies get more speed each wave",
 			Reference = Range(0.00, 5.00, 1.0),
-			Default = 0.05,
+			Default = 0.004,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -530,7 +530,31 @@ SettingsDefinition = {
 			Value = Config.IncrementJumpSpeedPerWave,
 			Description = "Zombies get more speed each wave",
 			Reference = Range(0.00, 100.00, 1.0),
-			Default = 3.0,
+			Default = 0.22,
+			UpdateFlag = UpdateFlag.Wave,
+			Category = "WAVES"
+		},
+		{
+			Name = "IncrementAmmoDropChancePerWave",
+			Text = "Increment Ammo drop per wave",
+			---@type Type|integer
+			Type = Type.Float,
+			Value = Config.IncrementAmmoDropChancePerWave,
+			Description = "Zombies drop more ammo each wave",
+			Reference = Range(0.00, 100.00, 1.0),
+			Default = 0.125,
+			UpdateFlag = UpdateFlag.Wave,
+			Category = "WAVES"
+		},
+		{
+			Name = "IncrementNadeDropChancePerWave",
+			Text = "Increment Nade drop per wave",
+			---@type Type|integer
+			Type = Type.Float,
+			Value = Config.IncrementNadeDropChancePerWave,
+			Description = "Zombies drop more nades each wave",
+			Reference = Range(0.00, 100.00, 1.0),
+			Default = 0.125,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
 		},
@@ -554,7 +578,7 @@ SettingsDefinition = {
 			Value = Config.ZombiesAliveForNextWave,
 			Description = "New wave is triggered when this number of zombies is reached",
 			Reference = Range(0.00, 128.00, 1.0),
-			Default = 5,
+			Default = 10,
 			UpdateFlag = UpdateFlag.None,
 			Category = "WAVES"
 		},
@@ -566,7 +590,7 @@ SettingsDefinition = {
 			Value = Config.TimeBetweenWaves,
 			Description = "Time in seconds between two waves",
 			Reference = Range(0.00, 60.00, 1.0),
-			Default = 7.0,
+			Default = 15.0,
 			UpdateFlag = UpdateFlag.None,
 			Category = "WAVES"
 		},
@@ -591,7 +615,7 @@ SettingsDefinition = {
 			Value = Config.FovForShooting,
 			Description = "Degrees of FOV of Bot",
 			Reference = Range(0.00, 360.00, 1.0),
-			Default = 270,
+			Default = 360,
 			UpdateFlag = UpdateFlag.None,
 			Category = "BEHAVIOUR"
 		},
@@ -603,7 +627,7 @@ SettingsDefinition = {
 			Value = Config.FovVerticleForShooting,
 			Description = "Degrees of FOV of Bot in vertical direction",
 			Reference = Range(0.00, 180.00, 1.0),
-			Default = 270,
+			Default = 360,
 			UpdateFlag = UpdateFlag.None,
 			Category = "BEHAVIOUR"
 		},
@@ -615,7 +639,7 @@ SettingsDefinition = {
 			Value = Config.MaxShootDistance,
 			Description = "Meters before bots will start shooting at players",
 			Reference = Range(1.00, 1500.00, 5.0),
-			Default = 125,
+			Default = 150,
 			UpdateFlag = UpdateFlag.None,
 			Category = "BEHAVIOUR"
 		},
@@ -639,7 +663,7 @@ SettingsDefinition = {
 			Value = Config.MaxDistanceShootBack,
 			Description = "Meters until bots (not sniper) shoot back if hit",
 			Reference = Range(1.00, 1500.00, 5.0),
-			Default = 150,
+			Default = 500,
 			UpdateFlag = UpdateFlag.None,
 			Category = "BEHAVIOUR"
 		},
@@ -862,7 +886,7 @@ SettingsDefinition = {
 			Value = Config.DistanceForDirectAttack,
 			Description = "Distance bots can hear you at",
 			Reference = Range(0.00, 1000.00, 1.0),
-			Default = 8,
+			Default = 10,
 			UpdateFlag = UpdateFlag.None,
 			Category = "ADVANCED"
 		},
@@ -874,7 +898,7 @@ SettingsDefinition = {
 			Value = Config.MeleeAttackCoolDown,
 			Description = "The time a bot waits before attacking with melee again",
 			Reference = Range(0.00, 60.00, 0.5),
-			Default = 1.5,
+			Default = 0.2,
 			UpdateFlag = UpdateFlag.None,
 			Category = "ADVANCED"
 		},
@@ -978,7 +1002,7 @@ SettingsDefinition = {
 			Value = Config.MinMoveCycle,
 			Description = "Min time bots move sidewards or straight before switching (in sec)",
 			Reference = Range(0.30, 10.00, 0.5),
-			Default = 0.3,
+			Default = 0.5,
 			UpdateFlag = UpdateFlag.None,
 			Category = "ADVANCED"
 		},
@@ -992,7 +1016,7 @@ SettingsDefinition = {
 			Value = Config.BotMinTimeAttackOnePlayer,
 			Description = "The minimum time a bot attacks one player for",
 			Reference = Range(0.00, 60.00, 0.5),
-			Default = 1.0,
+			Default = 15.0,
 			UpdateFlag = UpdateFlag.None,
 			Category = "EXPERT"
 		},
@@ -1004,7 +1028,7 @@ SettingsDefinition = {
 			Value = Config.BotAttackDuration,
 			Description = "The minimum time a zombie-bot tries to attack a player - recommended minimum 15,",
 			Reference = Range(0.00, 120.00, 0.5),
-			Default = 20,
+			Default = 25,
 			UpdateFlag = UpdateFlag.None,
 			Category = "EXPERT"
 		},
@@ -1051,7 +1075,7 @@ SettingsDefinition = {
 			Value = Config.DistanceToSpawnBots,
 			Description = "Distance to spawn Bots away from players",
 			Reference = Range(0.00, 100.00, 5.0),
-			Default = 30,
+			Default = 39,
 			UpdateFlag = UpdateFlag.None,
 			Category = "EXPERT"
 		},
@@ -1087,7 +1111,7 @@ SettingsDefinition = {
 			Value = Config.MaxTrysToSpawnAtDistance,
 			Description = "Try this often to spawn a bot away from players",
 			Reference = Range(0.00, 100.00, 1.0),
-			Default = 3,
+			Default = 10,
 			UpdateFlag = UpdateFlag.None,
 			Category = "EXPERT"
 		},
@@ -1156,7 +1180,7 @@ SettingsDefinition = {
 			Type = Type.Boolean,
 			Value = Config.DisableChatCommands,
 			Description = "If true, no chat commands can be used",
-			Default = false,
+			Default = true,
 			UpdateFlag = UpdateFlag.None,
 			Category = "OTHER"
 		},
