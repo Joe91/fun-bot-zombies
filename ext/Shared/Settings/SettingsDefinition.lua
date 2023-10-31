@@ -252,7 +252,7 @@ SettingsDefinition = {
 			Value = Config.SpeedFactorAttack,
 			Description = "Modifies the speed while attacking. 1 = normal",
 			Reference = Range(0.00, 3.00, 0.10),
-			Default = 0.775,
+			Default = 0.975,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},
@@ -264,7 +264,7 @@ SettingsDefinition = {
 			Value = Config.MinSpeedFactorAttack,
 			Description = "Modifies the minimal speed while attacking. 1 = normal",
 			Reference = Range(0.00, 3.00, 0.10),
-			Default = 0.975,
+			Default = 0.775,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "DIFFICULTY"
 		},

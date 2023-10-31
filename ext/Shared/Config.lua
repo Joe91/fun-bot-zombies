@@ -26,8 +26,8 @@ Config = {
 	BotExplosionDamageMultiplier = 2.25,	-- Damage multiplier for explosions  
 	BotWorseningSkill = 0.50,			-- Variation of the skill of a single bot. The higher, the worse the bots can get compared to the original settings 
 	DamageFactorKnife = 0.2,			-- Original Damage from bots gets multiplied by this 
-	SpeedFactorAttack = 0.775,			-- Modifies the speed while attacking. 1 = normal 
-	MinSpeedFactorAttack = 0.975,		-- Modifies the minimal speed while attacking. 1 = normal 
+	SpeedFactorAttack = 0.975,			-- Modifies the speed while attacking. 1 = normal 
+	MinSpeedFactorAttack = 0.775,		-- Modifies the minimal speed while attacking. 1 = normal 
 	MinHighJumpSpeed = 5.5,				-- Min Speed the bots jump with on high-jumps 
 	MaxHighJumpSpeed = 10.0,			-- Max Speed the bots jump with on high-jumps 
 
