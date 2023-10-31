@@ -7,7 +7,9 @@ Config = {
 	-- GENERAL
 	BotKit = BotKits.RANDOM_KIT,    -- The Kit of the Bots
 	BotColor = BotColors.RANDOM_COLOR, -- The Color of the Bots
+	UseZombieClasses = true,
 	ZombiesDropAmmo = true,         -- Zombies drop randomly some ammo
+	ZombiesDropNades = true,
 	RandomHealthOfZombies = false,  -- zombie-helth differs from bot to bot
 	RandomAttackSpeedOfZombies = true, -- zombie-speed differs from bot to bot
 	RandomDamgeOfZombies = false,   -- zombie-damage differs from bot to bot
@@ -42,15 +44,16 @@ Config = {
 	MaxBotsPerTeamDefault = 128,    -- Max number of bots in one team, if no other mode fits
 
 	-- WAVES
-	Waves = 20,                         -- Total amount of waves needed to win. 0 = infinite
-	PlayerLives = 25,                   -- Amount of time players can die before losing
-	FirstWaveCount = 24,                -- Zombies that spawn in the first wave
-	IncrementZombiesPerWave = 12,       -- Zombies that are added in each new wave
-	IncrementMaxHealthPerWave = 0,      -- Zombies get more health each wave
+	Waves = 20,                      -- Total amount of waves needed to win. 0 = infinite
+	PlayerLives = 25,                -- Amount of time players can die before losing
+	FirstWaveCount = 24,             -- Zombies that spawn in the first wave
+	IncrementZombiesPerWave = 12,    -- Zombies that are added in each new wave
+	IncrementMaxHealthPerWave = 0,   -- Zombies get more health each wave
 	IncrementDamageFactorPerWave = 0.0, -- Zombies deal more damage each wave
-	IncrementMaxSpeedPerWave = 0.004,   -- Zombies get more speed each wave
-	IncrementJumpSpeedPerWave = 0.22,   -- Zombies get more speed each wave
+	IncrementMaxSpeedPerWave = 0.004, -- Zombies get more speed each wave
+	IncrementJumpSpeedPerWave = 0.22, -- Zombies get more speed each wave
 	IncrementAmmoDropChancePerWave = 0.125,
+	IncrementNadeDropChancePerWave = 0.125,
 	SubtractSpawnDistancePerWave = 1.0, -- Decreases the spawn distance each wave. This can help sell the effect of a continuous wave when the server slot limit is reached
 	ZombiesAliveForNextWave = 10,       -- New wave is triggered when this number of zombies is reached
 	TimeBetweenWaves = 15.0,            -- Time in seconds between two waves

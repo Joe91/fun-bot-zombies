@@ -153,33 +153,8 @@ Events:Subscribe('Level:Loaded', function(levelName, gameMode, round, roundsPerM
 	bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
 end)
 
----VEXT Server Player:Left Event
---  + (Config.IncrementAmmoDropChancePerWave * m_BotSpawner._CurrentSpawnWave)
-function BotManager:OnPlayerKilled(p_Player)
-	if not m_Utilities:isBot(p_Player) or not Config.ZombiesDropAmmo or MathUtils:GetRandomInt(1, 100) > Globals.AmmoDropChance then
-		return
-	end
-
-	if bp == nil then
-		bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
-	end
-
-	if bp ~= nil then
-		local creationParams = EntityCreationParams()
-		creationParams.transform = LinearTransform()
-		creationParams.networked = true
-		creationParams.transform.trans = p_Player.soldier.transform.trans:Clone()
-		local createdBus = EntityManager:CreateEntitiesFromBlueprint(bp, creationParams)
-		if createdBus == nil then
-			return
-		end
-		for _, entity in pairs(createdBus.entities) do
-			entity:Init(Realm.Realm_ClientAndServer, true)
-		end
-	end
-end
-
 ---VEXT Server Player:Killed Event
+--  + (Config.IncrementAmmoDropChancePerWave * m_BotSpawner._CurrentSpawnWave)
 function BotManager:OnPlayerKilled(p_Player)
 	if not m_Utilities:isBot(p_Player) then
 		return
@@ -193,21 +168,21 @@ function BotManager:OnPlayerKilled(p_Player)
 		local s_RandomValue = MathUtils:GetRandomInt(1, 100)
 		-- supports drop nades, other bots drop ammo
 		if s_Bot and s_Bot.m_Kit == BotKits.Support then
-			if not Config.ZombiesDropNades or s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_NADE then
+			if not Config.ZombiesDropNades or s_RandomValue > Globals.NadeDropChance then
 				return
 			end
 			bp = ResourceManager:SearchForDataContainer('Weapons/M67/M67_Projectile')
 		else
-			if not Config.ZombiesDropAmmo or s_RandomValue > Registry.ZOMBIES.PROBABILITY_DROP_AMMO then
+			if not Config.ZombiesDropAmmo or s_RandomValue > Globals.AmmoDropChance then
 				return
 			end
 			bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
 		end
 	else
 		-- every bot can drop a nade or ammo
-		if Config.ZombiesDropAmmo and (MathUtils:GetRandomInt(1, 100) < Registry.ZOMBIES.PROBABILITY_DROP_AMMO) then
+		if Config.ZombiesDropAmmo and (MathUtils:GetRandomInt(1, 100) < Globals.AmmoDropChance) then
 			bp = ResourceManager:SearchForDataContainer('Weapons/Gadgets/Ammobag/Ammobag_Projectile')
-		elseif Config.ZombiesDropNades and (MathUtils:GetRandomInt(1, 100) < Registry.ZOMBIES.PROBABILITY_DROP_NADE) then
+		elseif Config.ZombiesDropNades and (MathUtils:GetRandomInt(1, 100) < Globals.NadeDropChance) then
 			bp = ResourceManager:SearchForDataContainer('Weapons/M67/M67_Projectile')
 		else
 			return

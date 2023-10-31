@@ -33,6 +33,7 @@ Globals = {
 	DamageFactorZombies = 0,
 	DistanceToSpawnBots = 0,
 	AmmoDropChance = 0,
+	NadeDropChance = 0,
 
 	RespawnWayBots = false,    -- Used for the runtime respawn.
 	AttackWayBots = false,     -- Used for the runtime attack.
