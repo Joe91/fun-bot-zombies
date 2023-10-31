@@ -3,35 +3,12 @@
 
 ---@class Config
 Config = {
-<<<<<<< Updated upstream
-    
-	-- GENERAL 
-	BotKit = BotKits.RANDOM_KIT,		-- The Kit of the Bots 
-	BotColor = BotColors.RANDOM_COLOR,	-- The Color of the Bots 
-	ZombiesDropAmmo = true,				-- Zombies drop randomly some ammo 
-	ZombiesDropNades = true,			-- Zombies drop randomly nades 
-	UseZombieClasses = false,			-- Zombie classes behave different 
-	RandomHealthOfZombies = true,		-- zombie-helth differs from bot to bot 
-	RandomAttackSpeedOfZombies = true,	-- zombie-speed differs from bot to bot 
-	RandomDamgeOfZombies = true,		-- zombie-damage differs from bot to bot 
-	RandomJumpSpeedOfZombies = true,	-- zombie-high-jumps differs from bot to bot 
-	ZombiesProne = true,				-- Zombies can prone when walking around 
-	ZombiesCrouch = true,				-- Zombies can crouch when walking around 
-	ZombiesWalk = true,					-- Zombies can walk when walking around 
-	ZombiesSprint = true,				-- Zombies can sprint when walking around 
+	-- GENERAL
+	ZombiesDropNades = true, -- Zombies drop randomly nades
+	UseZombieClasses = false, -- Zombie classes behave different
 
-	-- DIFFICULTY 
-	BotMaxHealth = 125.0,				-- Max health of bot at spawn(default 100.0) 
-	BotMinHealth = 75.0,				-- Min health of bot at spawn (default 100.0) 
-	BotHeadshotDamageMultiplier = 2.0,	-- Damage multiplier for shooting bots in the head 
-	BotExplosionDamageMultiplier = 2.25,	-- Damage multiplier for explosions  
-	BotWorseningSkill = 0.50,			-- Variation of the skill of a single bot. The higher, the worse the bots can get compared to the original settings 
-	DamageFactorKnife = 1.5,			-- Original Damage from bots gets multiplied by this 
-	SpeedFactorAttack = 1.2,			-- Modifies the speed while attacking. 1 = normal 
-	MinSpeedFactorAttack = 0.7,			-- Modifies the minimal speed while attacking. 1 = normal 
-	MinHighJumpSpeed = 5.0,				-- Min Speed the bots jump with on high-jumps 
-	MaxHighJumpSpeed = 12.0,			-- Max Speed the bots jump with on high-jumps 
-=======
+	-- DIFFICULTY
+	BotExplosionDamageMultiplier = 2.25, -- Damage multiplier for explosions
 
 	-- GENERAL
 	BotKit = BotKits.RANDOM_KIT,    -- The Kit of the Bots
@@ -45,7 +22,6 @@ Config = {
 	ZombiesCrouch = false,          -- Zombies can crouch when walking around
 	ZombiesWalk = false,            -- Zombies can walk when walking around
 	ZombiesSprint = true,           -- Zombies can sprint when walking around
->>>>>>> Stashed changes
 
 	-- DIFFICULTY
 	BotMaxHealth = 100.0,           -- Max health of bot at spawn(default 100.0)
@@ -57,34 +33,9 @@ Config = {
 	MinHighJumpSpeed = 5.5,         -- Min Speed the bots jump with on high-jumps
 	MaxHighJumpSpeed = 6.75,        -- Max Speed the bots jump with on high-jumps
 
-<<<<<<< Updated upstream
-	-- WAVES 
-	Waves = 20,							-- Total amount of waves needed to win. 0 = infinite 
-	PlayerLives = 20,					-- Amount of times players can die before losing 
-	FirstWaveCount = 48,				-- Zombies that spawn in the first wave 
-	IncrementZombiesPerWave = 24,		-- Zombies that are added in each new wave 
-	IncrementMaxHealthPerWave = 25,		-- Zombies get more health each wave 
-	IncrementDamageFactorPerWave = 0.1,	-- Zombies deal more damage each wave 
-	IncrementMaxSpeedPerWave = 0.05,	-- Zombies get more speed each wave 
-	IncrementJumpSpeedPerWave = 3.0,	-- Zombies get more speed each wave 
-	SubtractSpawnDistancePerWave = 1.0,	-- Decreases the spawn distance each wave. This can help sell the effect of a continuous wave when the server slot limit is reached 
-	ZombiesAliveForNextWave = 5,		-- New wave is triggered when this number of zombies is reached 
-	TimeBetweenWaves = 7.0,				-- Time in seconds between two waves 
-	KillRemainingZombiesAfterWave = false,	-- Remaining Bots Get Killed before a new wave starts 
+	-- BEHAVIOUR
+	MaxShootHeight = 12, -- Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance
 
-	-- BEHAVIOUR 
-	FovForShooting = 270,				-- Degrees of FOV of Bot 
-	FovVerticleForShooting = 270,		-- Degrees of FOV of Bot in vertical direction 
-	MaxShootDistance = 125,				-- Meters before bots will start shooting at players 
-	MaxShootHeight = 12,				-- Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance 
-	MaxDistanceShootBack = 150,			-- Meters until bots (not sniper) shoot back if hit 
-	BotAttackMode = BotAttackModes.RandomNotSet,	-- Mode the Bots attack with. Random, Crouch or Stand 
-	ShootBackIfHit = true,				-- Bot shoots back if hit 
-	BotsAttackPlayers = true,			-- Bots attack Players from other team 
-	BotCanKillHimself = false,			-- Bot takes fall damage or explosion-damage from own frags 
-	TeleportIfStuck = true,				-- Bot teleport to their target if they are stuck 
-	SnipersAttackChoppers = false,		-- Bots with sniper-rifels attack choppers 
-=======
 	-- SPAWN
 	SpawnMode = SpawnModes.wave_spawn, -- Mode the bots spawn with
 	InitNumberOfBots = 0,           -- Bots for spawnmode
@@ -113,7 +64,6 @@ Config = {
 	ZombiesAliveForNextWave = 10,       -- New wave is triggered when this number of zombies is reached
 	TimeBetweenWaves = 15.0,            -- Time in seconds between two waves
 	KillRemainingZombiesAfterWave = false, -- Remaining Bots Get Killed before a new wave starts
->>>>>>> Stashed changes
 
 	-- BEHAVIOUR
 	FovForShooting = 360,                     -- Degrees of FOV of Bot

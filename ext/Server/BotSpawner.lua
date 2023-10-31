@@ -38,11 +38,8 @@ function BotSpawner:RegisterVars()
 	self._SpawnedBotsInCurrentWave = 0
 	self._BotsToSpawnInWave = 0
 	self._BotsLeftInCurrentWave = 0
-<<<<<<< Updated upstream
-=======
 	self._BotKit = nil
 	self._KnifeWeapon = nil
->>>>>>> Stashed changes
 end
 
 -- =============================================
@@ -79,11 +76,9 @@ function BotSpawner:OnLevelLoaded(p_Round)
 	Globals.MaxJumpSpeedValue = Config.MaxHighJumpSpeed
 	Globals.MinJumpSpeedValue = Config.MinHighJumpSpeed
 	Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots
-<<<<<<< Updated upstream
-=======
+
 	self._BotKit = ResourceManager:SearchForDataContainer('Characters/Soldiers/MpSoldier')
 	self._KnifeWeapon = ResourceManager:SearchForDataContainer('Weapons/Knife/U_Knife')
->>>>>>> Stashed changes
 end
 
 ---VEXT Shared Level:Destroy Event
@@ -307,13 +302,7 @@ function BotSpawner:UpdateWaveConfig()
 	if s_WaveValue < 0 then
 		s_WaveValue = 0
 	end
-<<<<<<< Updated upstream
-	Globals.MaxHealthValue = Config.BotMaxHealth + (s_WaveValue * Config.IncrementMaxHealthPerWave)
-	Globals.MinHealthValue = Config.BotMinHealth + (s_WaveValue * Config.IncrementMaxHealthPerWave)
-	Globals.DamageFactorZombies = Config.DamageFactorKnife + (s_WaveValue * Config.IncrementDamageFactorPerWave)
-	Globals.MaxSpeedAttackValue = Config.SpeedFactorAttack + (s_WaveValue * Config.IncrementMaxSpeedPerWave)
-	Globals.MinSpeedAttackValue = Config.MinSpeedFactorAttack + (s_WaveValue * Config.IncrementMaxSpeedPerWave)
-=======
+
 	if self._CurrentSpawnWave == self._LastSuperWave + 5 then
 		s_DifficultyIncreaseItterations = s_DifficultyIncreaseItterations + 3
 		self._LastSuperWave = self._CurrentSpawnWave
@@ -327,13 +316,12 @@ function BotSpawner:UpdateWaveConfig()
 	Globals.DamageFactorZombies = Config.DamageFactorKnife + ((s_WaveValue * Config.IncrementDamageFactorPerWave) * s_DifficultyIncreaseItterations)
 	Globals.MaxSpeedAttackValue = MathUtils:Clamp(Config.SpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.SpeedFactorAttack, 1.02)
 	Globals.MinSpeedAttackValue = MathUtils:Clamp(Config.MinSpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.MinSpeedFactorAttack, 1.02)
->>>>>>> Stashed changes
+
 	Globals.MaxJumpSpeedValue = Config.MaxHighJumpSpeed + (s_WaveValue * Config.IncrementJumpSpeedPerWave)
 	Globals.MinJumpSpeedValue = Config.MinHighJumpSpeed + (s_WaveValue * Config.IncrementJumpSpeedPerWave)
 	self._BotsToSpawnInWave = Config.FirstWaveCount + (s_WaveValue * Config.IncrementZombiesPerWave)
 	Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots - (s_WaveValue * Config.SubtractSpawnDistancePerWave)
-<<<<<<< Updated upstream
-=======
+
 	Globals.AmmoDropChance = Registry.ZOMBIES.PROBABILITY_DROP_AMMO + (s_WaveValue * Config.IncrementAmmoDropChancePerWave)
 
 	local waveData = {
@@ -342,7 +330,6 @@ function BotSpawner:UpdateWaveConfig()
 	}
 	NetEvents:Broadcast('FunBots:WaveCount', waveData)
 	Events:Dispatch('FunBots:WaveCount', waveData)
->>>>>>> Stashed changes
 end
 
 function BotSpawner:UpdateBotAmountAndTeam()
@@ -443,11 +430,6 @@ function BotSpawner:UpdateBotAmountAndTeam()
 			-- all bots spawned. Check for alive bots
 			if m_BotManager:GetAliveBotCount() <= Config.ZombiesAliveForNextWave then
 				if Config.Waves == 0 then
-<<<<<<< Updated upstream
-					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. " finished, new wave starts in a few seconds", Config.TimeBetweenWaves)
-				else
-					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. "/" .. Config.Waves .. " finished, new wave starts in a " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
-=======
 					ChatManager:Yell("Wave " .. self._CurrentSpawnWave .. " finished, new wave starts in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
 					ChatManager:SendMessage("Wave " .. self._CurrentSpawnWave .. " finished, new wave starts in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
 				elseif self._CurrentSpawnWave == Config.Waves then
@@ -456,7 +438,6 @@ function BotSpawner:UpdateBotAmountAndTeam()
 				else
 					ChatManager:Yell("Wave " .. self._CurrentSpawnWave + 1 .. "/" .. Config.Waves .. " will start in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
 					ChatManager:SendMessage("Wave " .. self._CurrentSpawnWave + 1 .. "/" .. Config.Waves .. " will start in " .. Config.TimeBetweenWaves .. " seconds!", Config.TimeBetweenWaves)
->>>>>>> Stashed changes
 				end
 
 				self._FirstSpawnDelay = Config.TimeBetweenWaves
@@ -465,66 +446,6 @@ function BotSpawner:UpdateBotAmountAndTeam()
 				self:UpdateWaveConfig()
 				if self._CurrentSpawnWave > Config.Waves then
 					GamemodeManager:HumanTeamWin()
-<<<<<<< Updated upstream
-				end
-			end
-		end
-
-	elseif Globals.SpawnMode == SpawnModes.keep_playercount then
-		for i = 1, Globals.NrOfTeams do
-			if s_PlayerTeam == i then
-				s_TargetTeamCount[i] = 0
-			else
-				s_TargetTeamCount[i] = Config.InitNumberOfBots / (Globals.NrOfTeams - 1)
-			end
-		end
-		-- Limit team count.
-		for i = 1, Globals.NrOfTeams do
-
-			if Globals.NrOfTeams == 2 then
-				if i == s_PlayerTeam then
-					s_TargetTeamCount[i] = math.floor((s_TargetTeamCount[i] * Config.FactorPlayerTeamCount) + 0.5)
-				else
-					s_TargetTeamCount[i] = math.floor((s_TargetTeamCount[i] * (2 - Config.FactorPlayerTeamCount)) + 0.5)
-				end
-			end
-
-			if s_TargetTeamCount[i] > Globals.MaxBotsPerTeam then
-				s_TargetTeamCount[i] = Globals.MaxBotsPerTeam
-			end
-		end
-
-		for i = 1, Globals.NrOfTeams do
-			if s_TeamCount[i] < s_TargetTeamCount[i] then
-				self:SpawnWayBots(nil, s_TargetTeamCount[i] - s_TeamCount[i], true, 0, 0, i)
-			elseif s_TeamCount[i] > s_TargetTeamCount[i] and s_CountBots[i] > 0 then
-				m_BotManager:KillAll(s_TeamCount[i] - s_TargetTeamCount[i], i)
-			end
-		end
-
-		-- Move players if needed.
-		if s_PlayerCount >= Registry.BOT_TEAM_BALANCING.THRESHOLD then -- Use threshold.
-			local s_MinTargetPlayersPerTeam = math.floor(s_PlayerCount / Globals.NrOfTeams) -
-				Registry.BOT_TEAM_BALANCING.ALLOWED_DIFFERENCE
-
-			for i = 1, Globals.NrOfTeams do
-				if s_CountPlayers[i] < s_MinTargetPlayersPerTeam then
-					for _, l_Player in pairs(PlayerManager:GetPlayers()) do
-						if l_Player.soldier == nil and l_Player.teamId ~= i then
-							local s_OldTeam = l_Player.teamId
-							l_Player.teamId = i
-							s_CountPlayers[i] = s_CountPlayers[i] + 1
-							if s_OldTeam ~= 0 then
-								s_CountPlayers[s_OldTeam] = s_CountPlayers[s_OldTeam] - 1
-							end
-						end
-
-						if s_CountPlayers[i] >= s_MinTargetPlayersPerTeam then
-							break
-						end
-					end
-=======
->>>>>>> Stashed changes
 				end
 			end
 		end

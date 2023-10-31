@@ -45,11 +45,6 @@ Language:add(code, "FOV of Bots", "FOV of Bots")
 Language:add(code, "Degrees of FOV of Bot", "Degrees of FOV of Bot")
 Language:add(code, "FOV of Bots Verticle", "FOV of Bots Verticle")
 Language:add(code, "Degrees of FOV of Bot in vertical direction", "Degrees of FOV of Bot in vertical direction")
-<<<<<<< Updated upstream
-=======
-Language:add(code, "Max Shoot-Distance No Sniper", "Max Shoot-Distance No Sniper")
-Language:add(code, "Meters before bots (not sniper) will start shooting at players", "Meters before bots (not sniper) will start shooting at players")
->>>>>>> Stashed changes
 Language:add(code, "Max Distance a normal soldier shoots back if Hit", "Max Distance a normal soldier shoots back if Hit")
 Language:add(code, "Meters until bots (not sniper) shoot back if hit", "Meters until bots (not sniper) shoot back if hit")
 Language:add(code, "Bot Attack Mode", "Bot Attack Mode")
@@ -296,10 +291,6 @@ Language:add(code, "Zombies sprint", "Zombies sprint")
 Language:add(code, "Zombies can sprint when walking around", "Zombies can sprint when walking around")
 Language:add(code, "Bot Max Health at spawn", "Bot Max Health at spawn")
 Language:add(code, "Max health of bot at spawn(default 100.0)", "Max health of bot at spawn(default 100.0)")
-<<<<<<< Updated upstream
-=======
-Language:add(code, "Bot Min Health at spawn", "Bot Min Health at spawn")
->>>>>>> Stashed changes
 Language:add(code, "Min health of bot at spawn (default 100.0)", "Min health of bot at spawn (default 100.0)")
 Language:add(code, "Bot Min Health at spawn", "Bot Min Health at spawn")
 Language:add(code, "Damage multiplier for shooting bots in the head", "Damage multiplier for shooting bots in the head")
@@ -338,7 +329,6 @@ Language:add(code, "Bot min time Attack one player", "Bot min time Attack one pl
 Language:add(code, "The minimum time a bot attacks one player for", "The minimum time a bot attacks one player for")
 Language:add(code, "Bot attack mode duration", "Bot attack mode duration")
 Language:add(code, "The minimum time a zombie-bot tries to attack a player - recommended minimum 15,", "The minimum time a zombie-bot tries to attack a player - recommended minimum 15,")
-<<<<<<< Updated upstream
 Language:add(code, "Zombies Drop Nades", "Zombies Drop Nades")
 Language:add(code, "Zombies drop randomly nades", "Zombies drop randomly nades")
 Language:add(code, "Use Zombie Classes", "Use Zombie Classes")
@@ -350,5 +340,3 @@ Language:add(code, "Max Shoot-Distance", "Max Shoot-Distance")
 Language:add(code, "Meters before bots will start shooting at players", "Meters before bots will start shooting at players")
 Language:add(code, "Max Shoot-Height", "Max Shoot-Height")
 Language:add(code, "Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance", "Maximum height when a bot is close. Will scale over distance and will be 0 at the MaxShootDistance")
-=======
->>>>>>> Stashed changes

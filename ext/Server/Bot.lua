@@ -85,10 +85,7 @@ function Bot:__init(p_Player)
 	-- Zombie Stuff
 	self._SpeedFactorMovement = 1.0
 	self._SpeedFactorAttack = 1.0
-<<<<<<< Updated upstream
-=======
 	self._SpeedValue = 0.0
->>>>>>> Stashed changes
 	self._HighJumpSpeed = 1.0
 	self._RandomValueOfBot = 1.0
 	self._GoForDirectAttackIfClose = true

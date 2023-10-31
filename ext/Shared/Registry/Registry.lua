@@ -35,11 +35,8 @@ Registry = {
 		-- Patch version.
 		VERSION_PATCH = 0,
 		-- Additional label for pre-releases and build metadata.
-<<<<<<< Updated upstream
 		VERSION_LABEL = "dev3",
-=======
-		VERSION_LABEL = "dev2",
->>>>>>> Stashed changes
+
 		-- Current version type of this build.
 		VERSION_TYPE = VersionType.DevBuild,
 		-- The Version used for the Update-Check.
@@ -114,14 +111,11 @@ Registry = {
 		VEHICLE_SEAT_CHECK_CYCLE_TIME = 4.0,
 	},
 	ZOMBIES = {
-<<<<<<< Updated upstream
+
 		PROBABILITY_DROP_AMMO = 25,
 		PROBABILITY_DROP_NADE = 35,
 		PROBABILITY_GO_FOR_DIRECT_ATTACK = 50,
-=======
-		PROBABILITY_DROP_AMMO = 10,
-		PROBABILITY_GO_FOR_DIRECT_ATTACK = 65,
->>>>>>> Stashed changes
+
 		WEIGHT_PRONE = 2,
 		WEIGHT_CROUCH = 2,
 		WEIGHT_WALK = 2,
@@ -138,11 +132,7 @@ Registry = {
 		-- - distance the bots have to reach in height to continue with next Waypoint.
 		TARGET_HEIGHT_DISTANCE_WAYPOINT = 1.5,
 		-- Chance that the bot will teleport when they are stuck.
-<<<<<<< Updated upstream
-		PROBABILITY_TELEPORT_IF_STUCK = 70,
-=======
 		PROBABILITY_TELEPORT_IF_STUCK = 50,
->>>>>>> Stashed changes
 		-- Chance that the bot will teleport when they are stuck in a vehicle.
 		PROBABILITY_TELEPORT_IF_STUCK_IN_VEHICLE = 20,
 		-- At the end of an attack cycle, chance of throwing a grenade.
