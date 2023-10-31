@@ -333,19 +333,21 @@ function BotMovement:UpdateShootMovement(p_Bot)
 			p_Bot._ObstacleSequenceTimer = 1
 			p_Bot._FollowTargetPose = MathUtils:GetRandom(0, 100) < 40
 			table.remove(p_Bot._ShootWayPoints)
-			p_Bot:_SetInput(EntryInputActionEnum.EIAJump, 1)
-			p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeJumpClimb, 1)
-			if Config.UseZombieClasses then
-				-- only engineers jump high (but always)
-				if p_Bot.m_Kit == BotKits.Engineer then
-					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
-					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
-				end
-			else
-				-- every bot randomly jumps high
-				if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
-					local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
-					s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+			if p_Bot._ZombieSpeedValue ~= BotMoveSpeeds.VerySlowProne then
+				p_Bot:_SetInput(EntryInputActionEnum.EIAJump, 1)
+				p_Bot:_SetInput(EntryInputActionEnum.EIAQuicktimeJumpClimb, 1)
+				if Config.UseZombieClasses then
+					-- only engineers jump high (but always)
+					if p_Bot.m_Kit == BotKits.Engineer then
+						local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
+						s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+					end
+				else
+					-- every bot randomly jumps high
+					if MathUtils:GetRandom(0.0, 1.0) < p_Bot._RandomValueOfBot then
+						local s_PhysicsSoldier = PhysicsEntity(p_Bot.m_Player.soldier)
+						s_PhysicsSoldier.velocity = s_PhysicsSoldier.velocity + Vec3(0.0, p_Bot._HighJumpSpeed, 0.0)
+					end
 				end
 			end
 		else

@@ -4,7 +4,7 @@
 	"Description": "A highly customizable and configurable zombie-bot-mod for your Venice Unleashed Battlefield 3 server.",
 	"URL": "https://github.com/Joe91/fun-bots",
 	"Version": "0.8.0-dev3",
-	"HasWebUI": true,
+	"HasWebUI": false,
 	"Tags": ["fun-bot-zombies"],
 	"HasVeniceEXT": true,
 	"Dependencies": {

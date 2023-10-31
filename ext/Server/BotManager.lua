@@ -268,8 +268,9 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 
 		local s_Bot = self:GetBotByName(p_Soldier.player.name)
 		if s_Bot then
-			local newSpeed = MathUtils:Clamp(s_Bot._SpeedValue * (p_Soldier.health / p_Soldier.maxHealth), Registry.ZOMBIES.MIN_MOVE_SPEED * 3, s_Bot._SpeedValue)
-			s_Bot._SpeedFactorAttack = newSpeed
+			local s_NewSpeed = MathUtils:Clamp(s_Bot._SpeedValue * (p_Soldier.health / p_Soldier.maxHealth), Registry.ZOMBIES.MIN_MOVE_SPEED * 3, s_Bot._SpeedValue)
+			s_Bot._SpeedFactorAttack = s_NewSpeed
+			s_Bot._SpeedValue = s_NewSpeed
 
 			-- if newSpeed <= Registry.ZOMBIES.MIN_MOVE_SPEED * 2 then
 			-- 	s_Bot._ZombieSpeedValue = BotMoveSpeeds.VerySlowProne
@@ -964,8 +965,10 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		if p_Bot.m_Kit == BotKits.Recon then
 			s_SpeedValue = s_MaxSpeedValue
 			p_Bot._SpeedFactorAttack = s_SpeedValue
+			p_Bot._SpeedValue = s_SpeedValue
 		else
 			p_Bot._SpeedFactorAttack = s_MinSpeedValue
+			p_Bot._SpeedValue = s_MinSpeedValue
 		end
 	else
 		if Config.RandomAttackSpeedOfZombies then
@@ -974,6 +977,7 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 			s_SpeedValue = s_MaxSpeedValue
 		end
 		p_Bot._SpeedFactorAttack = s_SpeedValue
+		p_Bot._SpeedValue = s_SpeedValue
 	end
 
 	if s_SpeedValue < 1.0 then
