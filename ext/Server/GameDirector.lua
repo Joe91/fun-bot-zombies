@@ -141,66 +141,72 @@ function GameDirector:OnEngineUpdate(p_DeltaTime)
 		return
 	end
 
-	if Globals.IsRush then
-		self:_UpdateTimersOfMcoms(self.m_UpdateTimer)
-	end
+	-- self._UpdatePlayerPositionsZombies()
 
-	self.m_UpdateTimer = 0
+	-- if Globals.IsRush then
+	-- 	self:_UpdateTimersOfMcoms(self.m_UpdateTimer)
+	-- end
 
-	-- Update bot → team list.
-	local s_BotList = g_BotManager:GetBots()
-	self.m_BotsByTeam = {}
+	-- self.m_UpdateTimer = 0
 
-	for i = 1, #s_BotList do
-		if not s_BotList[i]:IsInactive() and s_BotList[i].m_Player ~= nil then
-			if self.m_BotsByTeam[s_BotList[i].m_Player.teamId] == nil then
-				self.m_BotsByTeam[s_BotList[i].m_Player.teamId] = {}
-			end
+	-- -- Update bot → team list.
+	-- local s_BotList = g_BotManager:GetBots()
+	-- self.m_BotsByTeam = {}
 
-			table.insert(self.m_BotsByTeam[s_BotList[i].m_Player.teamId], s_BotList[i])
-		end
-	end
+	-- for i = 1, #s_BotList do
+	-- 	if not s_BotList[i]:IsInactive() and s_BotList[i].m_Player ~= nil then
+	-- 		if self.m_BotsByTeam[s_BotList[i].m_Player.teamId] == nil then
+	-- 			self.m_BotsByTeam[s_BotList[i].m_Player.teamId] = {}
+	-- 		end
 
-	local s_MaxAssigns = {}
-	-- Evaluate how many bots are max- and min-assigned per objective.
+	-- 		table.insert(self.m_BotsByTeam[s_BotList[i].m_Player.teamId], s_BotList[i])
+	-- 	end
+	-- end
 
-	local s_AvailableObjectives = {}
+	-- local s_MaxAssigns = {}
+	-- -- Evaluate how many bots are max- and min-assigned per objective.
 
-	for _, l_Objective in pairs(self.m_AllObjectives) do
-		if not l_Objective.subObjective and not l_Objective.isBase and l_Objective.active and not l_Objective.destroyed and
-			not l_Objective.isEnterVehiclePath then
-			for i = 1, Globals.NrOfTeams do
-				if s_AvailableObjectives[i] == nil then
-					s_AvailableObjectives[i] = 0
-				end
+	-- local s_AvailableObjectives = {}
 
-				if l_Objective.team ~= i then
-					s_AvailableObjectives[i] = s_AvailableObjectives[i] + 1
-				end
-			end
-		end
-	end
+	-- for _, l_Objective in pairs(self.m_AllObjectives) do
+	-- 	if not l_Objective.subObjective and not l_Objective.isBase and l_Objective.active and not l_Objective.destroyed and
+	-- 		not l_Objective.isEnterVehiclePath then
+	-- 		for i = 1, Globals.NrOfTeams do
+	-- 			if s_AvailableObjectives[i] == nil then
+	-- 				s_AvailableObjectives[i] = 0
+	-- 			end
 
-	for i = 1, Globals.NrOfTeams do
-		s_MaxAssigns[i] = 0
+	-- 			if l_Objective.team ~= i then
+	-- 				s_AvailableObjectives[i] = s_AvailableObjectives[i] + 1
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 
-		if s_AvailableObjectives[i] == nil then
-			s_AvailableObjectives[i] = 1
-		end
+	-- for i = 1, Globals.NrOfTeams do
+	-- 	s_MaxAssigns[i] = 0
 
-		if self.m_BotsByTeam[i] ~= nil then
-			s_MaxAssigns[i] = math.floor((#self.m_BotsByTeam[i] / s_AvailableObjectives[i]) + 1)
+	-- 	if s_AvailableObjectives[i] == nil then
+	-- 		s_AvailableObjectives[i] = 1
+	-- 	end
 
-			if (#self.m_BotsByTeam[i] % 2) == 1 then
-				s_MaxAssigns[i] = s_MaxAssigns[i] + 1
-			end
-		end
+	-- 	if self.m_BotsByTeam[i] ~= nil then
+	-- 		s_MaxAssigns[i] = math.floor((#self.m_BotsByTeam[i] / s_AvailableObjectives[i]) + 1)
 
-		if s_MaxAssigns[i] > Registry.GAME_DIRECTOR.MAX_ASSIGNED_LIMIT then
-			s_MaxAssigns[i] = Registry.GAME_DIRECTOR.MAX_ASSIGNED_LIMIT
-		end
-	end
+	-- 		if (#self.m_BotsByTeam[i] % 2) == 1 then
+	-- 			s_MaxAssigns[i] = s_MaxAssigns[i] + 1
+	-- 		end
+	-- 	end
+
+	-- 	if s_MaxAssigns[i] > Registry.GAME_DIRECTOR.MAX_ASSIGNED_LIMIT then
+	-- 		s_MaxAssigns[i] = Registry.GAME_DIRECTOR.MAX_ASSIGNED_LIMIT
+	-- 	end
+	-- end
 end
+
+-- function GameDirector:_UpdatePlayerPositionsZombies()
+-- 	local s_AllPlayers = PlayerManager:GetPlayersByTeam(TeamId.Team1)
+-- end
 
 -- =============================================
 -- RUSH Events.

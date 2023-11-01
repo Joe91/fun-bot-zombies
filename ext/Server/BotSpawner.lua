@@ -1184,6 +1184,74 @@ function BotSpawner:_GetSpawnPoint(p_TeamId, p_SquadId)
 				s_ValidPointFound = true
 			end
 		end
+
+		-- not get the direction to the players
+		local s_Players = PlayerManager:GetPlayersByTeam(TeamId.Team1)
+		local s_Path = m_NodeCollection:Get(nil, s_ActiveWayIndex)
+		local s_PathLoops = (m_NodeCollection:GetFirst(s_ActiveWayIndex).OptValue == 0)
+		local s_ClosestPlayer = nil
+		local s_ClosestDistance = 0
+		local s_InvDirToClosestPlayer = false
+		local s_EndPosReached = false
+		local s_EndNegReached = false
+		local s_DirFound = false
+		for i = 1, #s_Path, 3 do
+			local s_NodeIndexPosDir = s_IndexOnPath + i
+			local s_NodeIndexNegDir = s_IndexOnPath - i
+			if s_PathLoops then
+				if s_NodeIndexPosDir > #s_Path then
+					s_NodeIndexPosDir = s_NodeIndexPosDir - #s_Path
+				end
+				if s_NodeIndexNegDir < 1 then
+					s_NodeIndexNegDir = s_NodeIndexNegDir + #s_Path
+				end
+			else
+				if s_NodeIndexPosDir > #s_Path then
+					s_NodeIndexPosDir = #s_Path
+					s_EndPosReached = true
+				end
+				if s_NodeIndexNegDir < 1 then
+					s_NodeIndexNegDir = 1
+					s_EndPosReached = true
+				end
+			end
+
+			local s_NodePos = m_NodeCollection:Get(s_NodeIndexPosDir, s_ActiveWayIndex)
+			local s_NodeNeg = m_NodeCollection:Get(s_NodeIndexNegDir, s_ActiveWayIndex)
+
+			for _, player in pairs(s_Players) do
+				if player.alive and player.soldier then
+					local s_DistPos = m_Utilities:DistanceFast(player.soldier.worldTransform.trans, s_NodePos.Position)
+					local s_DistNeg = m_Utilities:DistanceFast(player.soldier.worldTransform.trans, s_NodeNeg.Position)
+					if not s_ClosestPlayer then
+						s_ClosestPlayer = player
+						s_ClosestDistance = s_DistPos
+					end
+
+					if s_DistPos < s_ClosestDistance and not s_EndPosReached then
+						s_ClosestPlayer = player
+						s_ClosestDistance = s_DistPos
+						s_InvDirToClosestPlayer = false
+					end
+					if s_DistNeg < s_ClosestDistance and not s_EndNegReached then
+						s_ClosestPlayer = player
+						s_ClosestDistance = s_DistPos
+						s_InvDirToClosestPlayer = true
+					end
+					if s_DistNeg < 3.0 or s_DistPos < 3.0 then
+						s_DirFound = true
+						break
+					end
+				end
+			end
+			if s_DirFound then
+				break
+			end
+		end
+		s_InvertDirection = s_InvDirToClosestPlayer
+		-- print(s_ClosestPlayer)
+		-- print(s_ClosestDistance)
+		-- print(s_DirFound)
 	end
 
 	return s_TargetNode, s_InvertDirection, s_VehicleToSpawnIn
