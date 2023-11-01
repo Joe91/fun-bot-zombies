@@ -15,7 +15,7 @@ end
 
 ---@param p_Bot Bot
 local function _DefaultAttackingAction(p_Bot)
-	if not p_Bot._ShootPlayer.soldier or not p_Bot._Shoot or p_Bot._ShootModeTimer >= Config.BotAttackStuckDuration or (p_Bot:IsStuck() and p_Bot._AttackTimer > 15) then
+	if not p_Bot._ShootPlayer.soldier or not p_Bot._Shoot or p_Bot._ShootModeTimer >= Config.BotAttackDuration or (p_Bot:IsStuck() and p_Bot._AttackTimer > 15) then
 		p_Bot._TargetPitch = 0.0
 		p_Bot:AbortAttack()
 		p_Bot._AttackTimer = 0

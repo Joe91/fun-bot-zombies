@@ -312,13 +312,14 @@ function BotSpawner:UpdateWaveConfig()
 	Globals.MaxHealthValue = Config.BotMaxHealth + ((s_WaveValue * Config.IncrementMaxHealthPerWave) * s_DifficultyIncreaseItterations)
 	Globals.MinHealthValue = Config.BotMinHealth + ((s_WaveValue * Config.IncrementMaxHealthPerWave) * s_DifficultyIncreaseItterations)
 	Globals.DamageFactorZombies = Config.DamageFactorKnife + ((s_WaveValue * Config.IncrementDamageFactorPerWave) * s_DifficultyIncreaseItterations)
-	Globals.MaxSpeedAttackValue = MathUtils:Clamp(Config.SpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.SpeedFactorAttack, 1.02)
-	Globals.MinSpeedAttackValue = MathUtils:Clamp(Config.MinSpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.MinSpeedFactorAttack, 1.02)
+	Globals.MaxSpeedAttackValue = MathUtils:Clamp(Config.SpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.SpeedFactorAttack, Registry.ZOMBIES.MAX_MAX_ATTACK_SPEED)
+	Globals.MinSpeedAttackValue = MathUtils:Clamp(Config.MinSpeedFactorAttack + ((s_WaveValue * Config.IncrementMaxSpeedPerWave) * s_DifficultyIncreaseItterations), Config.MinSpeedFactorAttack, Registry.ZOMBIES.MAX_MIN_ATTACK_SPEED)
 	Globals.MaxJumpSpeedValue = Config.MaxHighJumpSpeed + (s_WaveValue * Config.IncrementJumpSpeedPerWave)
 	Globals.MinJumpSpeedValue = Config.MinHighJumpSpeed + (s_WaveValue * Config.IncrementJumpSpeedPerWave)
 	self._BotsToSpawnInWave = Config.FirstWaveCount + (s_WaveValue * Config.IncrementZombiesPerWave)
 	Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots - (s_WaveValue * Config.SubtractSpawnDistancePerWave)
 	Globals.AmmoDropChance = Registry.ZOMBIES.PROBABILITY_DROP_AMMO + (s_WaveValue * Config.IncrementAmmoDropChancePerWave)
+	Globals.NadeDropChance = Registry.ZOMBIES.PROBABILITY_DROP_NADE + (s_WaveValue * Config.IncrementNadeDropChancePerWave)
 
 	local waveData = {
 		current = self._CurrentSpawnWave,
