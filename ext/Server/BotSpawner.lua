@@ -32,7 +32,6 @@ function BotSpawner:RegisterVars()
 	self._KickPlayers = {}
 	---@type Bot[]
 	self._BotsWithoutPath = {}
-	self._SoldiersToApplyHealthTo = {}
 
 	self._CurrentSpawnWave = 0
 	self._LastSuperWave = 0
@@ -120,9 +119,9 @@ function BotSpawner:OnUpdateManagerUpdate(p_DeltaTime, p_UpdatePass)
 		if self._PlayerUpdateTimer > 2.0 and #self._SpawnSets == 0 then -- don't update while we have to spawn some more bots
 			self._PlayerUpdateTimer = 0.0
 			self:UpdateBotAmountAndTeam()
-			self:ApplyHealth() --Try to apply the maxhealth. Since this is based on a timer, bots might have their health set while they have already taken damage, this is not ideal.
 		end
 	end
+
 	if #self._SpawnSets > 0 then
 		if self._BotSpawnTimer > MathUtils:Clamp(#self._SpawnSets * 0.015, 0, 0.5) then -- Time to wait between spawn. 0.2 works
 			self._BotSpawnTimer = 0.0
@@ -328,23 +327,6 @@ function BotSpawner:UpdateWaveConfig()
 	}
 	NetEvents:Broadcast('FunBots:WaveCount', waveData)
 	Events:Dispatch('FunBots:WaveCount', waveData)
-end
-
-function BotSpawner:ApplyHealth()
-	local s_Bots = self._SoldiersToApplyHealthTo
-	if s_Bots == nil then return end
-
-	local appliedCount = 0
-	for index, s_Soldier in ipairs(s_Bots) do
-		if s_Soldier then
-			s_Soldier.health = s_Soldier.maxHealth
-			table.remove(self._SoldiersToApplyHealthTo, index)
-			appliedCount = appliedCount +1
-		end
-	end
-	if appliedCount > 0 then
-		print("Applied health to " .. appliedCount .. " bots!")
-	end
 end
 
 function BotSpawner:UpdateBotAmountAndTeam()
