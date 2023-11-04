@@ -335,16 +335,11 @@ function BotSpawner:ApplyHealth()
 	local s_Bots = self._SoldiersToApplyHealthTo
 	if s_Bots == nil then return end
 
-	local appliedCount = 0
 	for index, s_Soldier in ipairs(s_Bots) do
 		if s_Soldier then
 			s_Soldier.health = s_Soldier.maxHealth
 			table.remove(self._SoldiersToApplyHealthTo, index)
-			appliedCount = appliedCount +1
 		end
-	end
-	if appliedCount > 0 then
-		print("Applied health to " .. appliedCount .. " bots!")
 	end
 end
 
