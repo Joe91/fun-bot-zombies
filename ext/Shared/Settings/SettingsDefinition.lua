@@ -582,16 +582,64 @@ SettingsDefinition = {
 			Category = "WAVES"
 		},
 		{
-			Name = "IncrementNadeDropChancePerWave",
-			Text = "Increment Nade drop per wave",
+			Name = "IncrementMaxAssaultBotsPerWave",
+			Text = "Increment Max Assault Bots Per Wave",
 			---@type Type|integer
-			Type = Type.Float,
-			Value = Config.IncrementNadeDropChancePerWave,
-			Description = "Zombies drop more nades each wave",
-			Reference = Range(0.00, 100.00, 1.0),
-			Default = 0.125,
+			Type = Type.Integer,
+			Value = Config.IncrementMaxAssaultBotsPerWave,
+			Description = "Increment how many Assault bots can be spawned per wave",
+			Reference = Range(-100.00, 100.00, 1.0),
+			Default = -2,
 			UpdateFlag = UpdateFlag.Wave,
 			Category = "WAVES"
+		},
+		{
+			Name = "IncrementMaxEngineerBotsPerWave",
+			Text = "Increment Max Engineer Bots Per Wave",
+			---@type Type|integer
+			Type = Type.Integer,
+			Value = Config.IncrementMaxEngineerBotsPerWave,
+			Description = "Increment how many Engineer bots can be spawned per wave",
+			Reference = Range(-100.00, 100.00, 1.0),
+			Default = -2,
+			UpdateFlag = UpdateFlag.Wave,
+			Category = "WAVES"
+		},
+		{
+			Name = "IncrementMaxSupportBotsPerWave",
+			Text = "Increment Max Support Bots Per Wave",
+			---@type Type|integer
+			Type = Type.Integer,
+			Value = Config.IncrementMaxSupportBotsPerWave,
+			Description = "Increment how many Support bots can be spawned per wave",
+			Reference = Range(-100.00, 100.00, 1.0),
+			Default = 2,
+			UpdateFlag = UpdateFlag.Wave,
+			Category = "WAVES"
+		},
+		{
+			Name = "IncrementMaxReconBotsPerWave",
+			Text = "Increment Max Recon Bots Per Wave",
+			---@type Type|integer
+			Type = Type.Integer,
+			Value = Config.IncrementMaxEngineerBotsPerWave,
+			Description = "Increment how many Recon bots can be spawned per wave",
+			Reference = Range(-100.00, 100.00, 1.0),
+			Default = 2,
+			UpdateFlag = UpdateFlag.Wave,
+			Category = "WAVES"
+		},
+		{
+			Name = "MaxBotsPerTeamDefault",
+			Text = "Max Bots Per Team (default)",
+			---@type Type|integer
+			Type = Type.Integer,
+			Value = Config.MaxBotsPerTeamDefault,
+			Description = "Max number of bots in one team, if no other mode fits",
+			Reference = Range(-100.00, 100.00, 1.0),
+			Default = 128,
+			UpdateFlag = UpdateFlag.None,
+			Category = "SPAWN"
 		},
 		{
 			Name = "SubtractSpawnDistancePerWave",

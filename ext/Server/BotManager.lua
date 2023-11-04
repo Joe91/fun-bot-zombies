@@ -257,12 +257,12 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 
 	if p_Soldier.player.teamId == 2 then
 		if p_Info.isExplosionDamage then
-			p_Info.damage = p_Info.damage * 2.5
+			p_Info.damage = p_Info.damage * Config.BotExplosionDamageMultiplier
 		else
-			if p_Info.boneIndex == 1 then                              -- headshot
+			if p_Info.boneIndex == 1 then -- headshot
 				p_Info.damage = p_Info.damage * Config.BotHeadshotDamageMultiplier -- headshot multiplier is 2x by default
 			else
-				p_Info.damage = p_Info.damage * 0.6
+				p_Info.damage = p_Info.damage * Config.BotBodyshotDamageMultiplier
 			end
 		end
 
@@ -271,10 +271,6 @@ function BotManager:OnSoldierDamage(p_HookCtx, p_Soldier, p_Info, p_GiverInfo)
 			local s_NewSpeed = MathUtils:Clamp(s_Bot._SpeedValue * (p_Soldier.health / p_Soldier.maxHealth), Registry.ZOMBIES.MIN_MOVE_SPEED * 3, s_Bot._SpeedValue)
 			s_Bot._SpeedFactorAttack = s_NewSpeed
 			s_Bot._SpeedValue = s_NewSpeed
-
-			-- if newSpeed <= Registry.ZOMBIES.MIN_MOVE_SPEED * 2 then
-			-- 	s_Bot._ZombieSpeedValue = BotMoveSpeeds.VerySlowProne
-			-- end
 		end
 	elseif (p_Soldier.player.teamId == 1) then
 		if (p_Info.isExplosionDamage) then

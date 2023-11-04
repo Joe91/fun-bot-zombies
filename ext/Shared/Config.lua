@@ -26,6 +26,7 @@ Config = {
 	BotMaxHealth = 130.0,				-- Max health of bot at spawn(default 100.0) 
 	BotMinHealth = 100.0,				-- Min health of bot at spawn (default 100.0) 
 	BotHeadshotDamageMultiplier = 2.0,	-- Damage multiplier for shooting bots in the head 
+	BotBodyshotDamageMultiplier = 0.75,
 	BotExplosionDamageMultiplier = 2.25,	-- Damage multiplier for explosions  
 	BotWorseningSkill = 0.50,			-- Variation of the skill of a single bot. The higher, the worse the bots can get compared to the original settings 
 	DamageFactorKnife = 0.2,			-- Original Damage from bots gets multiplied by this 
@@ -41,10 +42,10 @@ Config = {
 	FactorPlayerTeamCount = 0.0,		-- Reduce player team in balanced_teams or fixed_number mode 
 	BotTeam = 2,						-- Default bot team (0 = neutral / auto, 1 = US, 2 = RU) TeamId.Team2 
 	BotNewLoadoutOnSpawn = true,		-- Bots get a new kit and color, if they respawn 
-	MaxAssaultBots = -1,				-- Maximum number of Bots with Assault Kit. -1 = no limit 
-	MaxEngineerBots = -1,				-- Maximum number of Bots with Engineer Kit. -1 = no limit 
-	MaxSupportBots = -1,				-- Maximum number of Bots with Support Kit. -1 = no limit 
-	MaxReconBots = -1,					-- Maximum number of Bots with Recon Kit. -1 = no limit 
+	MaxAssaultBots = 64,				-- Maximum number of Bots with Assault Kit. -1 = no limit 
+	MaxEngineerBots = 64,				-- Maximum number of Bots with Engineer Kit. -1 = no limit 
+	MaxSupportBots = 8,				-- Maximum number of Bots with Support Kit. -1 = no limit 
+	MaxReconBots = 8,					-- Maximum number of Bots with Recon Kit. -1 = no limit 
 	AdditionalBotSpawnDelay = 0.0,		-- Additional time a bot waits to respawn 
 	MaxBotsPerTeamDefault = 128,		-- Max number of bots in one team, if no other mode fits 
 
@@ -59,6 +60,10 @@ Config = {
 	IncrementJumpSpeedPerWave = 0.22,	-- Zombies get more speed each wave 
 	IncrementAmmoDropChancePerWave = 0.125,	-- Zombies drop more ammo each wave 
 	IncrementNadeDropChancePerWave = 0.125,	-- Zombies drop more nades each wave 
+	IncrementMaxAssaultBotsPerWave = -2,
+	IncrementMaxEngineerBotsPerWave = -2,
+	IncrementMaxSupportBotsPerWave = 2,
+	IncrementMaxReconBotsPerWave = 2,
 	SubtractSpawnDistancePerWave = 1.0,	-- Decreases the spawn distance each wave. This can help sell the effect of a continuous wave when the server slot limit is reached 
 	ZombiesAliveForNextWave = 10,		-- New wave is triggered when this number of zombies is reached 
 	TimeBetweenWaves = 15.0,			-- Time in seconds between two waves 

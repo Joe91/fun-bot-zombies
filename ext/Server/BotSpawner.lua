@@ -322,7 +322,11 @@ function BotSpawner:UpdateWaveConfig()
 	Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots - (s_WaveValue * Config.SubtractSpawnDistancePerWave)
 	Globals.AmmoDropChance = Registry.ZOMBIES.PROBABILITY_DROP_AMMO + (s_WaveValue * Config.IncrementAmmoDropChancePerWave)
 	Globals.NadeDropChance = Registry.ZOMBIES.PROBABILITY_DROP_NADE + (s_WaveValue * Config.IncrementNadeDropChancePerWave)
-
+	Globals.MaxAssaultBots = Config.MaxAssaultBots + (s_WaveValue * Config.IncrementMaxAssaultBotsPerWave)
+	Globals.MaxEngineerBots = Config.MaxEngineerBots + (s_WaveValue * Config.IncrementMaxEngineerBotsPerWave)
+	Globals.MaxSupportBots = Config.MaxSupportBots + (s_WaveValue * Config.IncrementMaxSupportBotsPerWave)
+	Globals.MaxReconBots = Config.MaxReconBots + (s_WaveValue * Config.IncrementMaxReconBotsPerWave)
+	
 	local waveData = {
 		current = self._CurrentSpawnWave,
 		max = Config.Waves
