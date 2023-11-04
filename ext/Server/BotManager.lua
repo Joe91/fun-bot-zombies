@@ -641,6 +641,20 @@ function BotManager:GetBots(p_TeamId)
 	end
 end
 
+function BotManager:GetAliveBots(p_TeamId)
+	local s_Bots = {}
+
+	for _, l_Bot in ipairs(self._Bots) do
+		if l_Bot.m_Player.soldier then
+			if p_TeamId == nil or l_Bot.m_Player.teamId == p_TeamId then
+				table.insert(s_Bots, l_Bot)
+			end
+		end
+	end
+
+	return s_Bots
+end
+
 ---@return integer
 function BotManager:GetBotCount()
 	return #self._Bots
@@ -880,7 +894,9 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 		end
 	end
 
-	s_BotSoldier.health = s_BotSoldier.maxHealth -- this does not work. TODO: find out how to fill the health up
+	if s_BotSoldier.health < s_BotSoldier.maxHealth then
+		table.insert(g_BotSpawner._SoldiersToApplyHealthTo, s_BotSoldier)
+	end
 
 
 	s_BotPlayer:SpawnSoldierAt(s_BotSoldier, p_Transform, p_Pose)
