@@ -120,6 +120,7 @@ function BotSpawner:OnUpdateManagerUpdate(p_DeltaTime, p_UpdatePass)
 		if self._PlayerUpdateTimer > 2.0 and #self._SpawnSets == 0 then -- don't update while we have to spawn some more bots
 			self._PlayerUpdateTimer = 0.0
 			self:UpdateBotAmountAndTeam()
+			self:ApplyHealth()
 		end
 	end
 
