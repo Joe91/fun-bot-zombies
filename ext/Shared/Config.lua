@@ -8,19 +8,19 @@ Config = {
 	BotKit = BotKits.RANDOM_KIT,		-- The Kit of the Bots 
 	BotColor = BotColors.Ninja,			-- The Color of the Bots 
 	ZombiesDropAmmo = true,				-- Zombies drop randomly some ammo 
-	ZombiesDropNades = false,			-- Zombies drop randomly nades 
+	ZombiesDropNades = true,			-- Zombies drop randomly nades 
 	UseZombieClasses = true,			-- Zombie classes behave different 
 	RandomHealthOfZombies = false,		-- zombie-helth differs from bot to bot 
-	RandomAttackSpeedOfZombies = true,	-- zombie-speed differs from bot to bot 
+	RandomAttackSpeedOfZombies = false,	-- zombie-speed differs from bot to bot 
 	RandomDamgeOfZombies = false,		-- zombie-damage differs from bot to bot 
-	RandomJumpSpeedOfZombies = true,	-- zombie-high-jumps differs from bot to bot 
+	RandomJumpSpeedOfZombies = false,	-- zombie-high-jumps differs from bot to bot 
 	ZombiesProne = false,				-- Zombies can prone when walking around 
 	ZombiesCrouch = false,				-- Zombies can crouch when walking around 
 	ZombiesWalk = false,				-- Zombies can walk when walking around 
 	ZombiesSprint = true,				-- Zombies can sprint when walking around 
 
 	-- DIFFICULTY 
-	BotMaxHealth = 300.0,				-- Max health of bot at spawn(default 100.0) 
+	BotMaxHealth = 130.0,				-- Max health of bot at spawn(default 100.0) 
 	BotMinHealth = 100.0,				-- Min health of bot at spawn (default 100.0) 
 	BotHeadshotDamageMultiplier = 2.0,	-- Damage multiplier for shooting bots in the head 
 	BotExplosionDamageMultiplier = 2.25,	-- Damage multiplier for explosions  
@@ -29,7 +29,7 @@ Config = {
 	SpeedFactorAttack = 0.975,			-- Modifies the speed while attacking. 1 = normal 
 	MinSpeedFactorAttack = 0.775,		-- Modifies the minimal speed while attacking. 1 = normal 
 	MinHighJumpSpeed = 5.5,				-- Min Speed the bots jump with on high-jumps 
-	MaxHighJumpSpeed = 7.0,			-- Max Speed the bots jump with on high-jumps 
+	MaxHighJumpSpeed = 10.0,			-- Max Speed the bots jump with on high-jumps 
 
 	-- SPAWN 
 	SpawnMode = SpawnModes.wave_spawn,	-- Mode the bots spawn with 
@@ -37,7 +37,7 @@ Config = {
 	NewBotsPerNewPlayer = 0,			-- Number to increase Bots by when new players join 
 	FactorPlayerTeamCount = 0.0,		-- Reduce player team in balanced_teams or fixed_number mode 
 	BotTeam = 2,						-- Default bot team (0 = neutral / auto, 1 = US, 2 = RU) TeamId.Team2 
-	BotNewLoadoutOnSpawn = false,		-- Bots get a new kit and color, if they respawn 
+	BotNewLoadoutOnSpawn = true,		-- Bots get a new kit and color, if they respawn 
 	MaxAssaultBots = -1,				-- Maximum number of Bots with Assault Kit. -1 = no limit 
 	MaxEngineerBots = -1,				-- Maximum number of Bots with Engineer Kit. -1 = no limit 
 	MaxSupportBots = -1,				-- Maximum number of Bots with Support Kit. -1 = no limit 
@@ -50,14 +50,14 @@ Config = {
 	PlayerLives = 25,					-- Amount of times players can die before losing 
 	FirstWaveCount = 24,				-- Zombies that spawn in the first wave 
 	IncrementZombiesPerWave = 12,		-- Zombies that are added in each new wave 
-	IncrementMaxHealthPerWave = 0,		-- Zombies get more health each wave 
+	IncrementMaxHealthPerWave = 2,		-- Zombies get more health each wave 
 	IncrementDamageFactorPerWave = 0.0,	-- Zombies deal more damage each wave 
 	IncrementMaxSpeedPerWave = 0.004,	-- Zombies get more speed each wave 
 	IncrementJumpSpeedPerWave = 0.22,	-- Zombies get more speed each wave 
 	IncrementAmmoDropChancePerWave = 0.125,	-- Zombies drop more ammo each wave 
 	IncrementNadeDropChancePerWave = 0.125,	-- Zombies drop more nades each wave 
 	SubtractSpawnDistancePerWave = 1.0,	-- Decreases the spawn distance each wave. This can help sell the effect of a continuous wave when the server slot limit is reached 
-	ZombiesAliveForNextWave = 8,		-- New wave is triggered when this number of zombies is reached 
+	ZombiesAliveForNextWave = 10,		-- New wave is triggered when this number of zombies is reached 
 	TimeBetweenWaves = 15.0,			-- Time in seconds between two waves 
 	KillRemainingZombiesAfterWave = false,	-- Remaining Bots Get Killed before a new wave starts 
 
