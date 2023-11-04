@@ -18,6 +18,9 @@ Config = {
 	ZombiesCrouch = false,				-- Zombies can crouch when walking around 
 	ZombiesWalk = false,				-- Zombies can walk when walking around 
 	ZombiesSprint = true,				-- Zombies can sprint when walking around 
+	ClassTank = BotKits.Support,
+	ClassSprinter = BotKits.Recon,
+	ClassExploder = BotKits.Engineer,
 
 	-- DIFFICULTY 
 	BotMaxHealth = 130.0,				-- Max health of bot at spawn(default 100.0) 

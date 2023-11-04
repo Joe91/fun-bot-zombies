@@ -167,7 +167,7 @@ function BotManager:OnPlayerKilled(p_Player)
 	if Config.UseZombieClasses then
 		local s_RandomValue = MathUtils:GetRandomInt(1, 100)
 		-- supports drop nades, other bots drop ammo
-		if s_Bot and s_Bot.m_Kit == BotKits.Support then
+		if s_Bot and s_Bot.m_Kit == Config.ClassExploder then
 			if not Config.ZombiesDropNades or s_RandomValue > Globals.NadeDropChance then
 				return
 			end
@@ -880,10 +880,12 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 
 	if Config.UseZombieClasses then
 		-- only assault-bots use the max health
-		if p_Bot.m_Kit == BotKits.Assault then
+		if p_Bot.m_Kit == Config.ClassTank then
 			s_BotSoldier.maxHealth = maxHealthValue
-		else
+		elseif p_Bot.m_Kit == Config.ClassSprinter then
 			s_BotSoldier.maxHealth = minHealthValue
+		else
+			s_BotSoldier.maxHealth = (maxHealthValue + minHealthValue) / 2 --Set to the average
 		end
 	else
 		-- randmod values of all bots or the same for all
@@ -953,11 +955,13 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 	end
 
 	if Config.UseZombieClasses then
-		-- Engineers can jump high
-		if p_Bot.m_Kit == BotKits.Engineer then
+		-- Sprinters can jump high
+		if p_Bot.m_Kit == Config.ClassSprinter then
 			p_Bot._HighJumpSpeed = s_MaxJumpValue
-		else
+		elseif p_Bot.m_Kit == Config.ClassTank then
 			p_Bot._HighJumpSpeed = s_MinJumpValue
+		else
+			p_Bot._HighJumpSpeed = (s_MaxJumpValue + s_MinJumpValue) / 2 --Set to the average
 		end
 	else
 		-- every bot same values or random-values
@@ -978,13 +982,15 @@ function BotManager:SpawnBot(p_Bot, p_Transform, p_Pose)
 
 	if Config.UseZombieClasses then
 		-- Recons can sprint faster
-		if p_Bot.m_Kit == BotKits.Recon then
-			s_SpeedValue = s_MaxSpeedValue
-			p_Bot._SpeedFactorAttack = s_SpeedValue
-			p_Bot._SpeedValue = s_SpeedValue
-		else
+		if p_Bot.m_Kit == Config.ClassSprinter then
+			p_Bot._SpeedFactorAttack = s_MaxSpeedValue
+			p_Bot._SpeedValue = s_MaxSpeedValue
+		elseif p_Bot.m_Kit == Config.ClassTank then
 			p_Bot._SpeedFactorAttack = s_MinSpeedValue
 			p_Bot._SpeedValue = s_MinSpeedValue
+		else
+			p_Bot._SpeedFactorAttack = (s_MaxSpeedValue + s_MinSpeedValue) / 2 --Set to the average
+			p_Bot._SpeedValue = (s_MaxSpeedValue + s_MinSpeedValue) / 2 --Set to the average
 		end
 	else
 		if Config.RandomAttackSpeedOfZombies then

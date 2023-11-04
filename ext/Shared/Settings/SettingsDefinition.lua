@@ -170,7 +170,42 @@ SettingsDefinition = {
 			UpdateFlag = UpdateFlag.None,
 			Category = "GENERAL"
 		},
-
+		{
+			Name = "ClassTank",
+			Text = "Tank Class",
+			---@type Type|integer
+			Type = Type.Enum,
+			Value = Config.ClassTank,
+			Reference = BotKits,
+			Description = "The class used for Tank zombies",
+			Default = BotKits.Support,
+			UpdateFlag = UpdateFlag.None,
+			Category = "GENERAL"
+		},
+		{
+			Name = "ClassSprinter",
+			Text = "Sprinter Class",
+			---@type Type|integer
+			Type = Type.Enum,
+			Value = Config.ClassSprinter,
+			Reference = BotKits,
+			Description = "The class used for Sprinter zombies",
+			Default = BotKits.Recon,
+			UpdateFlag = UpdateFlag.None,
+			Category = "GENERAL"
+		},
+		{
+			Name = "ClassExploder",
+			Text = "Exploder Class",
+			---@type Type|integer
+			Type = Type.Enum,
+			Value = Config.ClassExploder,
+			Reference = BotKits,
+			Description = "The class used for Exploder zombies",
+			Default = BotKits.Engineer,
+			UpdateFlag = UpdateFlag.None,
+			Category = "GENERAL"
+		},
 		-- Difficulty.
 		{
 			Name = "BotMaxHealth",
