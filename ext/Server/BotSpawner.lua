@@ -347,10 +347,10 @@ function BotSpawner:ApplyHealth()
 	if s_Bots == nil then return end
 
 	for index, s_Soldier in ipairs(s_Bots) do
-		if s_Soldier then
+		if s_Soldier and s_Soldier.isAlive then
 			s_Soldier.health = s_Soldier.maxHealth
-			table.remove(self._SoldiersToApplyHealthTo, index)
 		end
+		table.remove(self._SoldiersToApplyHealthTo, index)
 	end
 end
 
