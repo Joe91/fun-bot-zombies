@@ -77,6 +77,13 @@ function BotSpawner:OnLevelLoaded(p_Round)
 	Globals.MaxJumpSpeedValue = Config.MaxHighJumpSpeed
 	Globals.MinJumpSpeedValue = Config.MinHighJumpSpeed
 	Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots
+	Globals.AmmoDropChance = Registry.ZOMBIES.PROBABILITY_DROP_AMMO
+	Globals.NadeDropChance = Registry.ZOMBIES.PROBABILITY_DROP_NADE
+	Globals.MaxAssaultBots = Config.MaxAssaultBots
+	Globals.MaxEngineerBots = Config.MaxEngineerBots
+	Globals.MaxSupportBots = Config.MaxSupportBots
+	Globals.MaxReconBots = Config.MaxReconBots
+
 	self._BotKit = ResourceManager:SearchForDataContainer('Characters/Soldiers/MpSoldier')
 	self._KnifeWeapon = ResourceManager:SearchForDataContainer('Weapons/Knife/U_Knife')
 end
@@ -326,7 +333,7 @@ function BotSpawner:UpdateWaveConfig()
 	Globals.MaxEngineerBots = Config.MaxEngineerBots + (s_WaveValue * Config.IncrementMaxEngineerBotsPerWave)
 	Globals.MaxSupportBots = Config.MaxSupportBots + (s_WaveValue * Config.IncrementMaxSupportBotsPerWave)
 	Globals.MaxReconBots = Config.MaxReconBots + (s_WaveValue * Config.IncrementMaxReconBotsPerWave)
-	
+
 	local waveData = {
 		current = self._CurrentSpawnWave,
 		max = Config.Waves
@@ -428,6 +435,14 @@ function BotSpawner:UpdateBotAmountAndTeam()
 			Globals.MinSpeedAttackValue = Config.MinSpeedFactorAttack
 			Globals.MaxJumpSpeedValue = Config.MaxHighJumpSpeed
 			Globals.MinJumpSpeedValue = Config.MinHighJumpSpeed
+			Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots
+			Globals.AmmoDropChance = Registry.ZOMBIES.PROBABILITY_DROP_AMMO
+			Globals.NadeDropChance = Registry.ZOMBIES.PROBABILITY_DROP_NADE
+			Globals.MaxAssaultBots = Config.MaxAssaultBots
+			Globals.MaxEngineerBots = Config.MaxEngineerBots
+			Globals.MaxSupportBots = Config.MaxSupportBots
+			Globals.MaxReconBots = Config.MaxReconBots
+
 			self._BotsToSpawnInWave = Config.FirstWaveCount
 			Globals.DistanceToSpawnBots = Config.DistanceToSpawnBots
 		end
@@ -1332,19 +1347,19 @@ function BotSpawner:_GetSpawnBotKit()
 	local s_KitCount = m_BotManager:GetKitCount(s_BotKit)
 
 	if s_BotKit == BotKits.Assault then
-		if Config.MaxAssaultBots >= 0 and s_KitCount >= Config.MaxAssaultBots then
+		if Globals.MaxAssaultBots >= 0 and s_KitCount >= Globals.MaxAssaultBots then
 			s_ChangeKit = true
 		end
 	elseif s_BotKit == BotKits.Engineer then
-		if Config.MaxEngineerBots >= 0 and s_KitCount >= Config.MaxEngineerBots then
+		if Globals.MaxEngineerBots >= 0 and s_KitCount >= Globals.MaxEngineerBots then
 			s_ChangeKit = true
 		end
 	elseif s_BotKit == BotKits.Support then
-		if Config.MaxSupportBots >= 0 and s_KitCount >= Config.MaxSupportBots then
+		if Globals.MaxSupportBots >= 0 and s_KitCount >= Globals.MaxSupportBots then
 			s_ChangeKit = true
 		end
 	else -- s_BotKit == BotKits.Recon
-		if Config.MaxReconBots >= 0 and s_KitCount >= Config.MaxReconBots then
+		if Globals.MaxReconBots >= 0 and s_KitCount >= Globals.MaxReconBots then
 			s_ChangeKit = true
 		end
 	end
@@ -1352,19 +1367,19 @@ function BotSpawner:_GetSpawnBotKit()
 	if s_ChangeKit then
 		local s_AvailableKitList = {}
 
-		if (Config.MaxAssaultBots == -1) or (m_BotManager:GetKitCount(BotKits.Assault) < Config.MaxAssaultBots) then
+		if (Globals.MaxAssaultBots == -1) or (m_BotManager:GetKitCount(BotKits.Assault) < Globals.MaxAssaultBots) then
 			table.insert(s_AvailableKitList, BotKits.Assault)
 		end
 
-		if (Config.MaxEngineerBots == -1) or (m_BotManager:GetKitCount(BotKits.Engineer) < Config.MaxEngineerBots) then
+		if (Globals.MaxEngineerBots == -1) or (m_BotManager:GetKitCount(BotKits.Engineer) < Globals.MaxEngineerBots) then
 			table.insert(s_AvailableKitList, BotKits.Engineer)
 		end
 
-		if (Config.MaxSupportBots == -1) or (m_BotManager:GetKitCount(BotKits.Support) < Config.MaxSupportBots) then
+		if (Globals.MaxSupportBots == -1) or (m_BotManager:GetKitCount(BotKits.Support) < Globals.MaxSupportBots) then
 			table.insert(s_AvailableKitList, BotKits.Support)
 		end
 
-		if (Config.MaxReconBots == -1) or (m_BotManager:GetKitCount(BotKits.Recon) < Config.MaxReconBots) then
+		if (Globals.MaxReconBots == -1) or (m_BotManager:GetKitCount(BotKits.Recon) < Globals.MaxReconBots) then
 			table.insert(s_AvailableKitList, BotKits.Recon)
 		end
 
